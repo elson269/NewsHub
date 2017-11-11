@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="news_sources">
+        <item name="cnn">CNN</item>
+        <item name="bbc">BBC</item>
+        <item name="cnbc">CNBC</item>
+        <item name="reuters">Reuters</item>
+        <item name="the_guardian_uk">The Guardian(UK)</item>
+        <item name="the_huffington_post">The Huffington Post</item>
+        <item name="the_new_york_times">The New York Times</item>
+        <item name="the_wall_street_journal">The Wall Street Journal</item>
+        <item name="the_washington_post">The Washington Post</item>
+        <item name="usa_today">USA Today</item>
+    </string-array>
+</resources>
