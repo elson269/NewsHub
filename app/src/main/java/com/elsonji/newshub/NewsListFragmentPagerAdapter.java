@@ -6,22 +6,20 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class NewsListFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
-    //private final int PAGE_COUNT = 8;
-    //private String tabTitles[] = new String[] { "Tab1", "Tab2", "Tab3", "Tab4", "Tab5", "Tab6", "Tab7", "Tab8"};
     private int mNumOfTabs;
+    private String[] mNewsSourceStrings;
     //private Context mContext;
 
-    public NewsListFragmentPagerAdapter(FragmentManager fm, int numOfTabs) {
+    public NewsListFragmentPagerAdapter(FragmentManager fm, String[] strings) {
         super(fm);
         //mContext = context;
-        mNumOfTabs = numOfTabs;
-
+        mNumOfTabs = strings.length;
+        mNewsSourceStrings = strings;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return null;
-        //PageFragment.newInstance(position + 1);
+        return PageFragment.newInstance(position + 1);
     }
 
     @Override
@@ -29,10 +27,9 @@ public class NewsListFragmentPagerAdapter extends FragmentStatePagerAdapter {
         return mNumOfTabs;
     }
 
-//    @Override
-//    public CharSequence getPageTitle(int position) {
-//        //This method might not be needed.
-//        return tabTitles[position];
-//    }
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return mNewsSourceStrings[position];
+    }
 }
 

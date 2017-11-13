@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">News Hub</string>
     <string name="api_key">2b62324bfb41493bb49e3bb19073d484</string>
+    <string name="cnn">CNN</string>
+    <string name="bbc">BBC</string>
+    <string name="cnbc">CNBC</string>
+    <string name="reuters">Reuters</string>
+    <string name="the_guardian_uk">The Guardian(UK)</string>
+    <string name="the_huffington_post">The Huffington Post</string>
+    <string name="the_new_york_times">The New York Times</string>
+    <string name="the_wall_street_journal">The Wall Street Journal</string>
+    <string name="the_washington_post">The Washington Post</string>
+    <string name="usa_today">USA Today</string>
+    <string name="network_connection_error_message">Network unavailable, please check your network connection!</string>
+    <string name="news_title">News Title</string>
+    <string name="news_description">News Description</string>
+    <string name="news_not_available_warning">No news available.</string>
 </resources>
