@@ -22,23 +22,23 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class PageFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<News>>{
+public class PageFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<News>> {
 
     private static final String ARG_PAGE = "com.elsonji.newshub.ARG_PAGE";
     private static final String NEWS_BASE_URL = "https://newsapi.org/v1/articles?";
     private static final String SOURCE_PARAM = "source";
     private static final String SORT_BY_PARAM = "sortBy";
-    private static final String API_KEY_PARAM =  "apiKey";
+    private static final String API_KEY_PARAM = "apiKey";
     private static final int NEWS_LOADER_ID = 1;
-    private int mPage;
+    private String mNewsTabContent;
     private ArrayList<News> mNews;
     private RecyclerView mNewsRecyclerView;
     private NewsAdapter mNewsAdapter;
     private GridLayoutManager mGridLayoutManager;
 
-    public static PageFragment newInstance(int page) {
+    public static PageFragment newInstance(String newsTabContent) {
         Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
+        args.putString(ARG_PAGE, newsTabContent);
         PageFragment fragment = new PageFragment();
         fragment.setArguments(args);
         return fragment;
@@ -47,8 +47,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            mPage = getArguments().getInt(ARG_PAGE);
-
+        mNewsTabContent = getArguments().getString(ARG_PAGE);
     }
 
     @Nullable
@@ -56,13 +55,9 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_news_list, container, false);
-//        TextView textView = (TextView) rootView;
-//        textView.setText("Fragment #" + mPage);
+
         mNewsRecyclerView = (RecyclerView) rootView.findViewById(R.id.news_list_recycler_view);
         mNewsAdapter = new NewsAdapter(getContext(), new ArrayList<News>());
-
-
-
 
         getActivity().getLoaderManager().initLoader(NEWS_LOADER_ID, null, this);
         mGridLayoutManager = new GridLayoutManager(getContext(), 1,
@@ -79,7 +74,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
-            return new NewsLoader(getContext(), createNewsUrl("cnn", "top").toString());
+            return new NewsLoader(getContext(), createNewsUrl(mNewsTabContent, "top").toString());
         } else {
             Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.news_container),
                     getString(R.string.network_connection_error_message), Snackbar.LENGTH_SHORT);
@@ -95,7 +90,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         mNews = news;
         mNewsAdapter.clearNews();
         if (news != null && !news.isEmpty()) {
-            mNewsAdapter.addNews(news);
+            mNewsAdapter.addNews(mNews);
         } else {
             Toast.makeText(getActivity(), getString(R.string.news_not_available_warning),
                     Toast.LENGTH_LONG).show();
@@ -104,7 +99,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader<ArrayList<News>> loader) {
-
+        mNewsAdapter.clearNews();
     }
 
     public URL createNewsUrl(String sourceParam, String sortByParam) {
@@ -123,5 +118,10 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         }
         return newsUrl;
     }
+
+
+//    public String getTitle() {
+//        return mNewsTabContent;
+//    }
 }
 

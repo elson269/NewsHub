@@ -37,7 +37,7 @@ public class NetworkUtils {
             }
             return news;
         }catch (JSONException e) {
-            Log.e(LOG_TAG, "Problem parsing the recipe JSON results", e);
+            Log.e(LOG_TAG, "Problem parsing the news JSON results", e);
         }
         return null;
     }

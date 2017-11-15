@@ -22,15 +22,15 @@ public class NewsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_list);
 
         String[] newsSources = getResources().getStringArray(R.array.news_sources);
-        ArrayList<String> newSourceArrayList = new ArrayList<>(Arrays.asList(newsSources));
+        ArrayList<String> newsSourceArrayList = new ArrayList<>(Arrays.asList(newsSources));
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.news_list_view_pager);
-        viewPager.setAdapter(new NewsListFragmentPagerAdapter(getSupportFragmentManager(), newsSources));
+        viewPager.setAdapter(new NewsListFragmentPagerAdapter(getSupportFragmentManager(), newsSourceArrayList));
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        for (int i = 0; i < newsSources.length; i++) {
-            tabLayout.addTab(tabLayout.newTab().setText(newSourceArrayList.get(i)));
-        }
+//        for (int i = 0; i < newsSources.length; i++) {
+//            tabLayout.addTab(tabLayout.newTab().setText(newSourceArrayList.get(i)));
+//        }
         tabLayout.setupWithViewPager(viewPager);
     }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="news_sources">
-        <item>CNN</item>
-        <item>BBC</item>
-        <item>CNBC</item>
+        <item>cnn</item>
+        <item>bbc-news</item>
+        <item>cnbc</item>
     </string-array>
 </resources>
