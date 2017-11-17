@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,16 +28,18 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final String SOURCE_PARAM = "source";
     private static final String SORT_BY_PARAM = "sortBy";
     private static final String API_KEY_PARAM = "apiKey";
-    private static final int NEWS_LOADER_ID = 1;
+    public static final String TAB_CONTENT = "com.elsonji.newshub.TAB_CONTENT";
     private String mNewsTabContent;
+    private int mLoaderId;
     private ArrayList<News> mNews;
     private RecyclerView mNewsRecyclerView;
     private NewsAdapter mNewsAdapter;
     private GridLayoutManager mGridLayoutManager;
 
-    public static PageFragment newInstance(String newsTabContent) {
+    public static PageFragment newInstance(String newsTabContent, int id) {
         Bundle args = new Bundle();
         args.putString(ARG_PAGE, newsTabContent);
+        args.putInt("id", id);
         PageFragment fragment = new PageFragment();
         fragment.setArguments(args);
         return fragment;
@@ -48,22 +49,28 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNewsTabContent = getArguments().getString(ARG_PAGE);
+        mLoaderId = getArguments().getInt("id");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
+//        if (savedInstanceState != null && savedInstanceState.containsKey(TAB_CONTENT)) {
+//            savedInstanceState.getString(TAB_CONTENT);
+//        }
         View rootView = inflater.inflate(R.layout.fragment_news_list, container, false);
+       // if (savedInstanceState == null) {
 
-        mNewsRecyclerView = (RecyclerView) rootView.findViewById(R.id.news_list_recycler_view);
-        mNewsAdapter = new NewsAdapter(getContext(), new ArrayList<News>());
 
-        getActivity().getLoaderManager().initLoader(NEWS_LOADER_ID, null, this);
-        mGridLayoutManager = new GridLayoutManager(getContext(), 1,
-                LinearLayoutManager.VERTICAL, false);
-        mNewsRecyclerView.setLayoutManager(mGridLayoutManager);
-        mNewsRecyclerView.setAdapter(mNewsAdapter);
+            mNewsRecyclerView = rootView.findViewById(R.id.news_list_recycler_view);
+            mNewsAdapter = new NewsAdapter(getContext(), new ArrayList<News>());
+
+            mGridLayoutManager = new GridLayoutManager(getContext(), 1);
+            mNewsRecyclerView.setAdapter(mNewsAdapter);
+            mNewsRecyclerView.setLayoutManager(mGridLayoutManager);
+            getActivity().getLoaderManager().initLoader(mLoaderId, null, this);
+      //  }
         return rootView;
     }
 
@@ -74,7 +81,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
-            return new NewsLoader(getContext(), createNewsUrl(mNewsTabContent, "top").toString());
+            return new NewsLoader(getActivity(), createNewsUrl(mNewsTabContent, "top").toString());
         } else {
             Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.news_container),
                     getString(R.string.network_connection_error_message), Snackbar.LENGTH_SHORT);
@@ -91,6 +98,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         mNewsAdapter.clearNews();
         if (news != null && !news.isEmpty()) {
             mNewsAdapter.addNews(mNews);
+            //mNewsAdapter.notifyDataSetChanged();
         } else {
             Toast.makeText(getActivity(), getString(R.string.news_not_available_warning),
                     Toast.LENGTH_LONG).show();
@@ -119,9 +127,10 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         return newsUrl;
     }
 
-
-//    public String getTitle() {
-//        return mNewsTabContent;
-//    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(TAB_CONTENT, mNewsTabContent);
+    }
 }
 

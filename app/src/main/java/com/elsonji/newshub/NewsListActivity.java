@@ -10,31 +10,43 @@ import java.util.Arrays;
 
 public class NewsListActivity extends AppCompatActivity {
 
-//    private static final String NEWS_BASE_URL = "https://newsapi.org/v1/articles?";
-//    private static final String SOURCE_PARAM = "source";
-//    private static final String SORT_BY_PARAM = "sortBy";
-//    private static final String API_KEY_PRAM =  "apiKey";
-
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
-        String[] newsSources = getResources().getStringArray(R.array.news_sources);
+        String[] newsSources = {"cnn", "cnbc", "bild", "bloomberg", "buzzfeed"};
         ArrayList<String> newsSourceArrayList = new ArrayList<>(Arrays.asList(newsSources));
+//
+//        if (savedInstanceState != null && savedInstanceState.containsKey(TAB_POSITION)) {
+//            mViewPager = (ViewPager) findViewById(R.id.news_list_view_pager);
+//            mViewPager.setCurrentItem(savedInstanceState.getInt(TAB_POSITION));
+//        } else {
+            mViewPager = (ViewPager) findViewById(R.id.news_list_view_pager);
+            mViewPager.setOffscreenPageLimit(3);
+            mViewPager.setAdapter(new NewsListFragmentPagerAdapter(getSupportFragmentManager(), newsSourceArrayList));
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.news_list_view_pager);
-        viewPager.setAdapter(new NewsListFragmentPagerAdapter(getSupportFragmentManager(), newsSourceArrayList));
-
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-//        for (int i = 0; i < newsSources.length; i++) {
-//            tabLayout.addTab(tabLayout.newTab().setText(newSourceArrayList.get(i)));
-//        }
-        tabLayout.setupWithViewPager(viewPager);
+            mTabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+            mTabLayout.setupWithViewPager(mViewPager);
+       // }
     }
 
-//    public URL createNewsUrl(String sourceParam, String sortByParam) {
+//    @Override
+//    protected void onSaveInstanceState( Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putInt(TAB_POSITION, mTabLayout.getSelectedTabPosition());
+//    }
+
+//    @Override
+//    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+//        super.onRestoreInstanceState(savedInstanceState);
+//        mViewPager.setCurrentItem(savedInstanceState.getInt(TAB_POSITION));
+//    }
+
+    //    public URL createNewsUrl(String sourceParam, String sortByParam) {
 //        URL newsUrl = null;
 //        Uri builtUri = Uri.parse(NEWS_BASE_URL)
 //                .buildUpon()

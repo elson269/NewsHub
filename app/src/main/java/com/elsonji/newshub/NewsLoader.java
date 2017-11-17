@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class NewsLoader extends AsyncTaskLoader<ArrayList<News>>{
     String mUrl;
-    ArrayList<News> mNews;
+    private ArrayList<News> mNews;
 
     public NewsLoader(Context context, String url) {
         super(context);

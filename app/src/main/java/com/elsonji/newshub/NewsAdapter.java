@@ -1,13 +1,15 @@
 package com.elsonji.newshub;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @Override
     public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        ConstraintLayout itemView = (ConstraintLayout) LayoutInflater.from(mContext)
+        LinearLayout itemView = (LinearLayout) LayoutInflater.from(mContext)
                 .inflate(R.layout.news_item, parent, false);
         NewsViewHolder newsViewHolder = new NewsViewHolder(itemView);
 
@@ -35,6 +37,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     public void onBindViewHolder(NewsViewHolder holder, int position) {
         holder.newsTitleTextView.setText(mNews.get(position).getTitle());
         holder.newsDescriptionTextView.setText(mNews.get(position).getDescription());
+        Picasso.with(mContext).load(mNews.get(position).getUrlToImage()).into(holder.newsImageView);
     }
 
     @Override
