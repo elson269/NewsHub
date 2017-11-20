@@ -1,6 +1,6 @@
 package com.elsonji.newshub;
 
-import android.content.AsyncTaskLoader;
+import android.support.v4.content.AsyncTaskLoader;
 import android.content.Context;
 
 import com.elsonji.newshub.Network.NetworkUtils;

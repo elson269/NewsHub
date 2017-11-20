@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="news_sources">
+    <string-array name="static_news_sources">
         <item>cnn</item>
         <item>bbc-news</item>
         <item>cnbc</item>
+    </string-array>
+
+    <string-array name="dynamic_news_source">
+        <item>abc-news</item>
+        <item>fox-news</item>
+        <item>nbc-news</item>
+        <item>msnbc</item>
+        <item>the-huffington-post</item>
+        <item>the-new-york-times</item>
+        <item>the-wall-street-journal</item>
+        <item>the-washington-post</item>
+        <item>usa-today</item>
     </string-array>
 </resources>

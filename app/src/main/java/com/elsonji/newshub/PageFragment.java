@@ -1,15 +1,15 @@
 package com.elsonji.newshub;
 
-import android.app.LoaderManager;
 import android.content.Context;
-import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,23 +23,24 @@ import java.util.ArrayList;
 
 public class PageFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<News>> {
 
-    private static final String ARG_PAGE = "com.elsonji.newshub.ARG_PAGE";
+    private static final String ARG_PAGE = "ARG_PAGE";
     private static final String NEWS_BASE_URL = "https://newsapi.org/v1/articles?";
     private static final String SOURCE_PARAM = "source";
     private static final String SORT_BY_PARAM = "sortBy";
     private static final String API_KEY_PARAM = "apiKey";
-    public static final String TAB_CONTENT = "com.elsonji.newshub.TAB_CONTENT";
+    public static final String LOADER_ID = "LOADER_ID";
     private String mNewsTabContent;
     private int mLoaderId;
     private ArrayList<News> mNews;
     private RecyclerView mNewsRecyclerView;
     private NewsAdapter mNewsAdapter;
     private GridLayoutManager mGridLayoutManager;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public static PageFragment newInstance(String newsTabContent, int id) {
         Bundle args = new Bundle();
         args.putString(ARG_PAGE, newsTabContent);
-        args.putInt("id", id);
+        args.putInt(LOADER_ID, id);
         PageFragment fragment = new PageFragment();
         fragment.setArguments(args);
         return fragment;
@@ -49,28 +50,35 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNewsTabContent = getArguments().getString(ARG_PAGE);
-        mLoaderId = getArguments().getInt("id");
+        mLoaderId = getArguments().getInt(LOADER_ID);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
-//        if (savedInstanceState != null && savedInstanceState.containsKey(TAB_CONTENT)) {
-//            savedInstanceState.getString(TAB_CONTENT);
-//        }
+
         View rootView = inflater.inflate(R.layout.fragment_news_list, container, false);
-       // if (savedInstanceState == null) {
+        mNewsRecyclerView = rootView.findViewById(R.id.news_list_recycler_view);
+        mNewsAdapter = new NewsAdapter(getContext(), new ArrayList<News>());
+
+        mGridLayoutManager = new GridLayoutManager(getContext(), 1);
+        mNewsRecyclerView.setAdapter(mNewsAdapter);
+        mNewsRecyclerView.setLayoutManager(mGridLayoutManager);
+        getActivity().getSupportLoaderManager().initLoader(mLoaderId, null, this);
 
 
-            mNewsRecyclerView = rootView.findViewById(R.id.news_list_recycler_view);
-            mNewsAdapter = new NewsAdapter(getContext(), new ArrayList<News>());
+        mSwipeRefreshLayout = rootView.findViewById(R.id.swipe_refresher);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mNewsRecyclerView.setAdapter(mNewsAdapter);
+                mNewsRecyclerView.setLayoutManager(mGridLayoutManager);
+                getActivity().getSupportLoaderManager().initLoader(mLoaderId, null, PageFragment.this );
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
-            mGridLayoutManager = new GridLayoutManager(getContext(), 1);
-            mNewsRecyclerView.setAdapter(mNewsAdapter);
-            mNewsRecyclerView.setLayoutManager(mGridLayoutManager);
-            getActivity().getLoaderManager().initLoader(mLoaderId, null, this);
-      //  }
         return rootView;
     }
 
@@ -83,11 +91,11 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         if (isConnected) {
             return new NewsLoader(getActivity(), createNewsUrl(mNewsTabContent, "top").toString());
         } else {
-            Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.news_container),
-                    getString(R.string.network_connection_error_message), Snackbar.LENGTH_SHORT);
-            snackbar.show();
-//            Toast.makeText(getActivity(), getString(R.string.network_connection_error_message),
-//                    Toast.LENGTH_LONG).show();
+//            Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.news_container),
+//                    getString(R.string.network_connection_error_message), Snackbar.LENGTH_SHORT);
+//            snackbar.show();
+            Toast.makeText(getActivity(), getString(R.string.network_connection_error_message),
+                    Toast.LENGTH_LONG).show();
             return null;
         }
     }
@@ -127,10 +135,5 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         return newsUrl;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(TAB_CONTENT, mNewsTabContent);
-    }
 }
 
