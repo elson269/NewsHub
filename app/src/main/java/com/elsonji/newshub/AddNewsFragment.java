@@ -11,16 +11,16 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-public class AddNewsFragment extends Fragment {
-    public static final String DYNAMIC_NEWS_SOURCE = "DYNAMIC_NEWS_SOURCE";
-    private ArrayList<String> mDynamicNewsSources;
-    private RecyclerView mNewsSourceRecyclerView;
-    private NewsSourceAdapter mNewsSourceAdapter;
-    private LinearLayoutManager mSourceLayoutManager;
+public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapter.OnNewsSourceClickListener{
+    public static final String NEWS_SOURCE_FOR_ADDITION = "NEWS_SOURCE_FOR_ADDITION";
+    private ArrayList<String> mNewsSourcesForAddition, mNewsSourceChosen;
+    private RecyclerView mNewsSourceAdditionRecyclerView;
+    private NewsSourceAdditionAdapter mNewsSourceAdditionAdapter;
+    private LinearLayoutManager mSourceAdditionLayoutManager;
 
     public static AddNewsFragment newInstance(ArrayList<String> data) {
         Bundle args = new Bundle();
-        args.putStringArrayList(DYNAMIC_NEWS_SOURCE, data);
+        args.putStringArrayList(NEWS_SOURCE_FOR_ADDITION, data);
         AddNewsFragment fragment = new AddNewsFragment();
         fragment.setArguments(args);
         return fragment;
@@ -29,20 +29,25 @@ public class AddNewsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDynamicNewsSources = getArguments().getStringArrayList(DYNAMIC_NEWS_SOURCE);
+        mNewsSourcesForAddition = getArguments().getStringArrayList(NEWS_SOURCE_FOR_ADDITION);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_news, container, false);
-        mNewsSourceRecyclerView = rootView.findViewById(R.id.add_news_recycler_view);
+        mNewsSourceAdditionRecyclerView = rootView.findViewById(R.id.add_news_recycler_view);
 
-        mNewsSourceAdapter = new NewsSourceAdapter(getContext(), mDynamicNewsSources);
-        mNewsSourceRecyclerView.setAdapter(mNewsSourceAdapter);
-        mSourceLayoutManager = new LinearLayoutManager(getContext());
-        mNewsSourceRecyclerView.setLayoutManager(mSourceLayoutManager);
+        mNewsSourceAdditionAdapter = new NewsSourceAdditionAdapter(getContext(), mNewsSourcesForAddition, this);
+        mNewsSourceAdditionRecyclerView.setAdapter(mNewsSourceAdditionAdapter);
+        mSourceAdditionLayoutManager = new LinearLayoutManager(getContext());
+        mNewsSourceAdditionRecyclerView.setLayoutManager(mSourceAdditionLayoutManager);
         return rootView;
+    }
+
+    @Override
+    public void onSourceItemClick(View view, int position) {
+        mNewsSourceChosen = new ArrayList<>();
+        mNewsSourceChosen.add(mNewsSourcesForAddition.get(position));
     }
 }

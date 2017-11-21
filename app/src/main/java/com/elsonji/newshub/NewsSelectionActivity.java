@@ -20,11 +20,14 @@ public class NewsSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_selection);
 
-        ArrayList<String> dynamicNewsSource = new ArrayList<>(Arrays.asList(getResources().
+        ArrayList<String> newsSourceForAddition = new ArrayList<>(Arrays.asList(getResources().
                 getStringArray(R.array.dynamic_news_source)));
 
+        ArrayList<String> newsSourceForDeletion = new ArrayList<>();
 
-        mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(), dynamicNewsSource);
+
+        mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
+                newsSourceForAddition);
 
         mSourceTabLayout = findViewById(R.id.news_selection_tab_layout);
         mSourceViewPager = findViewById(R.id.news_selection_view_pager);

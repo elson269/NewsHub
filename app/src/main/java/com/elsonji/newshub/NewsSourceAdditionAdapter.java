@@ -8,31 +8,45 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class NewsSourceAdapter extends RecyclerView.Adapter<NewsSourceAdapter.NewsSourceViewHolder> {
+public class NewsSourceAdditionAdapter extends RecyclerView.Adapter<NewsSourceAdditionAdapter.
+        NewsSourceViewHolder> {
 
     private Context mContext;
     private ArrayList<String> mNewsSourceList;
+    private OnNewsSourceClickListener mListener;
 
-    public NewsSourceAdapter(Context context, ArrayList<String> newsSourceList) {
+    public NewsSourceAdditionAdapter(Context context, ArrayList<String> newsSourceList,
+                                     OnNewsSourceClickListener listener) {
         mContext = context;
         mNewsSourceList = removeDashInString(newsSourceList);
-
+        mListener = listener;
     }
 
     @Override
-    public NewsSourceAdapter.NewsSourceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public NewsSourceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LinearLayout itemView = (LinearLayout) LayoutInflater.from(mContext)
                 .inflate(R.layout.news_source_item, parent, false);
-        NewsSourceViewHolder newsSourceViewHolder = new NewsSourceViewHolder(itemView);
-
+        final NewsSourceViewHolder newsSourceViewHolder = new NewsSourceViewHolder(itemView);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int positionClicked = newsSourceViewHolder.getAdapterPosition();
+                mListener.onSourceItemClick(view, positionClicked);
+                newsSourceViewHolder.imageButton.setImageResource(R.drawable.ic_plus_circle_grey_outline);
+                Toast.makeText(mContext, mNewsSourceList.get(positionClicked) + " " +
+                                mContext.getResources().getString(R.string.news_source_added),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
         return newsSourceViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(NewsSourceAdapter.NewsSourceViewHolder holder, int position) {
+    public void onBindViewHolder(NewsSourceViewHolder holder, int position) {
         holder.imageButton.setImageResource(R.drawable.ic_plus_circle_red_outline);
         holder.newsSourceTextView.setText(mNewsSourceList.get(position));
     }
@@ -52,7 +66,7 @@ public class NewsSourceAdapter extends RecyclerView.Adapter<NewsSourceAdapter.Ne
 
         public NewsSourceViewHolder(View itemView) {
             super(itemView);
-            imageButton = itemView.findViewById(R.id.news_source_add_button);
+            imageButton = itemView.findViewById(R.id.news_source_change_button);
             newsSourceTextView = itemView.findViewById(R.id.news_source_text_view);
         }
     }
@@ -68,13 +82,17 @@ public class NewsSourceAdapter extends RecyclerView.Adapter<NewsSourceAdapter.Ne
         notifyItemChanged(0, newsSourceList.size() - 1);
     }
 
-    private ArrayList<String> removeDashInString(ArrayList<String> dataSet) {
+    public static ArrayList<String> removeDashInString(ArrayList<String> dataSet) {
         String string;
         ArrayList<String> stringsWithoutDash = new ArrayList<>();
-        for (String data: dataSet) {
+        for (String data : dataSet) {
             string = data.replace("-", " ").toUpperCase();
             stringsWithoutDash.add(string);
         }
         return stringsWithoutDash;
+    }
+
+    public interface OnNewsSourceClickListener {
+        void onSourceItemClick(View view, int position);
     }
 }

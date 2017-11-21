@@ -17,19 +17,15 @@ public class NewsSourceFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fragment;
+
         switch (position) {
             case 0:
-                fragment = new DeleteNewsFragment();
-                break;
+                return AddNewsFragment.newInstance(mDynamicNewsSource);
             case 1:
-                fragment = AddNewsFragment.newInstance(mDynamicNewsSource);
-                break;
+                return DeleteNewsFragment.newInstance(mDynamicNewsSource);
             default:
-                fragment = null;
-                break;
+                return null;
         }
-        return fragment;
     }
 
     @Override
@@ -41,9 +37,9 @@ public class NewsSourceFragmentPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "My News";
-            case 1:
                 return "News Source";
+            case 1:
+                return "My News";
             default:
                 return null;
         }

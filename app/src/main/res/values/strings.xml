@@ -14,5 +14,7 @@
     <string name="news_title">News Title</string>
     <string name="news_description">News Description</string>
     <string name="news_not_available_warning">No news available.</string>
-    
+    <string name="news_source_added">added to My News.</string>
+    <string name="news_source_deleted">deleted from My News.</string>
+
 </resources>
