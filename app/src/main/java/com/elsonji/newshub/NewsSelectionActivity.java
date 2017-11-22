@@ -26,7 +26,7 @@ public class NewsSelectionActivity extends AppCompatActivity {
         ArrayList<String> newsSourceForDeletion = new ArrayList<>();
 
 
-        mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
+        mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(this, getSupportFragmentManager(),
                 newsSourceForAddition);
 
         mSourceTabLayout = findViewById(R.id.news_selection_tab_layout);

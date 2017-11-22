@@ -35,8 +35,10 @@ public class NewsSourceAdditionAdapter extends RecyclerView.Adapter<NewsSourceAd
             @Override
             public void onClick(View view) {
                 int positionClicked = newsSourceViewHolder.getAdapterPosition();
+                mNewsSourceList.remove(positionClicked);
+                notifyItemRemoved(positionClicked);
+                notifyItemRangeChanged(positionClicked, mNewsSourceList.size());
                 mListener.onSourceItemClick(view, positionClicked);
-                newsSourceViewHolder.imageButton.setImageResource(R.drawable.ic_plus_circle_grey_outline);
                 Toast.makeText(mContext, mNewsSourceList.get(positionClicked) + " " +
                                 mContext.getResources().getString(R.string.news_source_added),
                         Toast.LENGTH_SHORT).show();
