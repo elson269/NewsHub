@@ -35,13 +35,14 @@ public class NewsSourceAdditionAdapter extends RecyclerView.Adapter<NewsSourceAd
             @Override
             public void onClick(View view) {
                 int positionClicked = newsSourceViewHolder.getAdapterPosition();
+                Toast.makeText(mContext, mNewsSourceList.get(positionClicked) + " " +
+                                mContext.getResources().getString(R.string.news_source_added),
+                        Toast.LENGTH_SHORT).show();
                 mNewsSourceList.remove(positionClicked);
                 notifyItemRemoved(positionClicked);
                 notifyItemRangeChanged(positionClicked, mNewsSourceList.size());
                 mListener.onSourceItemClick(view, positionClicked);
-                Toast.makeText(mContext, mNewsSourceList.get(positionClicked) + " " +
-                                mContext.getResources().getString(R.string.news_source_added),
-                        Toast.LENGTH_SHORT).show();
+
             }
         });
         return newsSourceViewHolder;
@@ -87,11 +88,15 @@ public class NewsSourceAdditionAdapter extends RecyclerView.Adapter<NewsSourceAd
     public static ArrayList<String> removeDashInString(ArrayList<String> dataSet) {
         String string;
         ArrayList<String> stringsWithoutDash = new ArrayList<>();
-        for (String data : dataSet) {
-            string = data.replace("-", " ").toUpperCase();
-            stringsWithoutDash.add(string);
+        if (dataSet != null && dataSet.size() != 0) {
+            for (String data : dataSet) {
+                string = data.replace("-", " ").toUpperCase();
+                stringsWithoutDash.add(string);
+            }
+            return stringsWithoutDash;
+        } else {
+            return null;
         }
-        return stringsWithoutDash;
     }
 
     public interface OnNewsSourceClickListener {

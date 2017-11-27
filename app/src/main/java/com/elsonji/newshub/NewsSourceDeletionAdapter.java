@@ -40,13 +40,13 @@ public class NewsSourceDeletionAdapter extends RecyclerView.Adapter
             @Override
             public void onClick(View view) {
                 int positionClicked = newsSourceViewHolder.getAdapterPosition();
+                Toast.makeText(mContext, mNewsSourceDeletionList.get(positionClicked) + " " +
+                                mContext.getResources().getString(R.string.news_source_deleted),
+                        Toast.LENGTH_SHORT).show();
                 mNewsSourceDeletionList.remove(positionClicked);
                 notifyItemRemoved(positionClicked);
                 notifyItemRangeChanged(positionClicked, mNewsSourceDeletionList.size());
                 mListener.onSourceItemClick(view, positionClicked);
-                Toast.makeText(mContext, mNewsSourceDeletionList.get(positionClicked) + " " +
-                                mContext.getResources().getString(R.string.news_source_deleted),
-                        Toast.LENGTH_SHORT).show();
             }
         });
 
