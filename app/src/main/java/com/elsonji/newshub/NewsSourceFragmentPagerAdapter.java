@@ -1,6 +1,5 @@
 package com.elsonji.newshub;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,16 +8,16 @@ import java.util.ArrayList;
 
 public class NewsSourceFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private ArrayList<String> mNewsSource, mMyNewsSource;
+    private ArrayList<String> mNewsSource, mMyNewsSource, mDeletedNewsData;
     private Fragment mFragment;
-    private Context mContext;
 
-    public NewsSourceFragmentPagerAdapter(Context context, FragmentManager fm, ArrayList<String> newsSourceData,
-                                          ArrayList<String> myNewsData) {
+    public NewsSourceFragmentPagerAdapter(FragmentManager fm, ArrayList<String> newsSourceData,
+                                          ArrayList<String> myNewsData, ArrayList<String> myDeletedNewsData) {
         super(fm);
-        mContext = context;
+
         mNewsSource = newsSourceData;
         mMyNewsSource = myNewsData;
+        mDeletedNewsData = myDeletedNewsData;
         //notifyDataSetChanged();
     }
 
@@ -32,7 +31,7 @@ public class NewsSourceFragmentPagerAdapter extends FragmentPagerAdapter {
                 return mFragment;
             case 1:
                 //notifyDataSetChanged();
-                mFragment = DeleteNewsFragment.newInstance(mMyNewsSource);
+                mFragment = DeleteNewsFragment.newInstance(mMyNewsSource, mDeletedNewsData);
 
                 return mFragment;
             default:
