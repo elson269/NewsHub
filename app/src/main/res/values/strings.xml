@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">News Hub</string>
+    <string name="api_key">2b62324bfb41493bb49e3bb19073d484</string>
     <string name="cnn">CNN</string>
     <string name="bbc">BBC</string>
     <string name="cnbc">CNBC</string>

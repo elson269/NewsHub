@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +54,7 @@ public class NewsSelectionActivity extends AppCompatActivity implements AddNewsF
         mSelectedNewsSourceList = new ArrayList<>();
         mDeletedMyNews = new ArrayList<>();
         mRemainingMyNews = new ArrayList<>();
+        mRemainingNewsSource = new ArrayList<>();
         if (selectedNewsSourceSet != null && selectedNewsSourceSet.size() != 0) {
             mSelectedNewsSourceList = new ArrayList<>(selectedNewsSourceSet);
         }
@@ -65,26 +67,63 @@ public class NewsSelectionActivity extends AppCompatActivity implements AddNewsF
 
         if (remainingNewsSourceSet != null && remainingNewsSourceSet.size() != 0) {
             mRemainingNewsSource = new ArrayList<>(remainingNewsSourceSet);
+        }
 
-            if (mRemainingNewsSource.size() == newsSourceForAddition.size()) {
-                mSelectedNewsSourceList.removeAll(mDeletedMyNews);
-                mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
-                        newsSourceForAddition, mSelectedNewsSourceList, mDeletedMyNews);
+
+//        if (mRemainingNewsSource != null && mRemainingNewsSource.size() != 0 ) {
+//            if (mRemainingMyNews != null && mRemainingMyNews.size() != 0) {
+//                mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
+//                        mRemainingNewsSource, mRemainingMyNews, mDeletedMyNews);
+//            } else if (mRemainingMyNews != null && mRemainingMyNews.size() == 0){
+//                mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
+//                        newsSourceForAddition, mRemainingMyNews, mDeletedMyNews);
+//            }
+//        } else if (mRemainingNewsSource != null && mRemainingNewsSource.size() == 0){
+//            mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
+//                    mRemainingNewsSource, newsSourceForAddition, mDeletedMyNews);
+//        } else {
+//            mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
+//                    newsSourceForAddition, mRemainingMyNews, mDeletedMyNews);
+//        }
+
+
+// check  mRemainingNewsSource.addAll(mDeletedMyNews) size here first because it might have changed
+        // and also mSelectedNewsSourceList.removeAll(mDeletedMyNews) size. and then compare their current  size in the following if else statement.
+
+        mRemainingNewsSource.addAll(mDeletedMyNews);
+        mSelectedNewsSourceList.removeAll(mDeletedMyNews);
+
+        if (mRemainingNewsSource != null && mRemainingNewsSource.size() != 0) {
+
+            if (mSelectedNewsSourceList != null && mSelectedNewsSourceList.size() == 0) {
+                Log.i("aaaaaa", "aaaaaa");
+                //mSelectedNewsSourceList.removeAll(mDeletedMyNews);
+                if (mDeletedMyNews.size() == 0) {
+                    mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
+                            mRemainingNewsSource, mSelectedNewsSourceList, mDeletedMyNews);
+                } else {
+                    mRemainingNewsSource.removeAll(mDeletedMyNews);
+                    mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
+                            mRemainingNewsSource, mSelectedNewsSourceList, mDeletedMyNews);
+                }
             } else {
-                mRemainingNewsSource.addAll(mDeletedMyNews);
-                mSelectedNewsSourceList.removeAll(mDeletedMyNews);
+                Log.i("aaaaaa", "bbbbbb");
+                //mRemainingNewsSource.addAll(mDeletedMyNews);
+                //mSelectedNewsSourceList.removeAll(mDeletedMyNews);
                 mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
                         mRemainingNewsSource, mSelectedNewsSourceList, mDeletedMyNews);
             }
         } else {
 
             if (mSelectedNewsSourceList != null && mSelectedNewsSourceList.size() == 0) {
-                mSelectedNewsSourceList.removeAll(mDeletedMyNews);
+                Log.i("aaaaaa", "cccccc");
+                //mSelectedNewsSourceList.removeAll(mDeletedMyNews);
                 mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
                         newsSourceForAddition, mSelectedNewsSourceList, mDeletedMyNews);
-            } else {
+            } else if (mSelectedNewsSourceList != null && mSelectedNewsSourceList.size() != 0) {
+                Log.i("aaaaaa", "dddddd");
                 //mRemainingNewsSource.addAll(mDeletedMyNews);
-                mSelectedNewsSourceList.removeAll(mDeletedMyNews);
+                // mSelectedNewsSourceList.removeAll(mDeletedMyNews);
                 mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
                         mDeletedMyNews, mSelectedNewsSourceList, mDeletedMyNews);
             }
