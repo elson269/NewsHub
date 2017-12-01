@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.elsonji.newshub.DeleteNewsFragment.DELETED_MY_NEWS;
 import static com.elsonji.newshub.NewsSelectionActivity.MY_NEWS_SOURCE;
 
 public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapter.OnNewsSourceClickListener {
@@ -81,7 +83,7 @@ public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapt
 
 
         SharedPreferences myNewsSharedPreferences = getActivity().
-                getSharedPreferences(MY_NEWS_SOURCE, Context.MODE_PRIVATE);
+                getSharedPreferences(MY_NEWS_SOURCE, MODE_PRIVATE);
         SharedPreferences.Editor editor = myNewsSharedPreferences.edit();
 
         //Convert ArrayList to Set so it can be added to SharedPreferences.
@@ -93,12 +95,36 @@ public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapt
 
 
         SharedPreferences remainingNewsSharedPreferences = getActivity().
-                getSharedPreferences(REMAINING_NEWS_SOURCE, Context.MODE_PRIVATE);
+                getSharedPreferences(REMAINING_NEWS_SOURCE, MODE_PRIVATE);
         SharedPreferences.Editor editorForRemainingSources = remainingNewsSharedPreferences.edit();
         Set<String> setForRemainingSources = new HashSet<>();
         setForRemainingSources.addAll(mNewsSourcesForAddition);
         editorForRemainingSources.putStringSet(REMAINING_NEWS_SOURCE, setForRemainingSources);
         editorForRemainingSources.apply();
+
+        //Clear deletedMyNewsSet to make sure it will not be added to mRemainingNewsSource in
+        //NewsSelectionActivity after it has already been added; otherwise, it will cause duplicated
+        //items.
+        SharedPreferences deletedMyNewsPref = getActivity().
+                getSharedPreferences(DELETED_MY_NEWS, MODE_PRIVATE);
+        Set<String> deletedMyNewsSet = deletedMyNewsPref.getStringSet(DELETED_MY_NEWS, null);
+        if (deletedMyNewsSet != null) {
+            deletedMyNewsSet.clear();
+        }
+    }
+
+
+    public void updateNews(ArrayList<String> myNewsDeleted) {
+        mNewsSourcesForAddition.removeAll(myNewsDeleted);
+        mNewsSourceAdditionAdapter = new NewsSourceAdditionAdapter(getContext(),
+                mNewsSourcesForAddition, this);
+        if (mNewsSourcesForAddition != null && mNewsSourcesForAddition.size() != 0) {
+            mEmptyTextView = getActivity().findViewById(R.id.add_fragment_emtpy_text_view);
+            mEmptyTextView.setVisibility(View.GONE);
+        }
+        mNewsSourceAdditionRecyclerView.setAdapter(mNewsSourceAdditionAdapter);
+        mSourceAdditionLayoutManager = new LinearLayoutManager(getContext());
+        mNewsSourceAdditionRecyclerView.setLayoutManager(mSourceAdditionLayoutManager);
     }
 
     public interface DataUpdateListener {

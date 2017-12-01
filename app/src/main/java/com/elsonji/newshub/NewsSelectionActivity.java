@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,9 +12,9 @@ import java.util.Set;
 
 import static com.elsonji.newshub.AddNewsFragment.REMAINING_NEWS_SOURCE;
 import static com.elsonji.newshub.DeleteNewsFragment.DELETED_MY_NEWS;
-import static com.elsonji.newshub.DeleteNewsFragment.REMAINING_MY_NEWS;
 
-public class NewsSelectionActivity extends AppCompatActivity implements AddNewsFragment.DataUpdateListener {
+public class NewsSelectionActivity extends AppCompatActivity implements
+        AddNewsFragment.DataUpdateListener, DeleteNewsFragment.NewsUpdateListener {
 
     public static final String MY_NEWS_SOURCE = "MY_NEWS_SOURCE";
     private TabLayout mSourceTabLayout;
@@ -24,7 +23,6 @@ public class NewsSelectionActivity extends AppCompatActivity implements AddNewsF
     private ArrayList<String> mSelectedNewsSourceList;
     private ArrayList<String> mRemainingNewsSource;
     private ArrayList<String> mDeletedMyNews;
-    private ArrayList<String> mRemainingMyNews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +40,6 @@ public class NewsSelectionActivity extends AppCompatActivity implements AddNewsF
                 getSharedPreferences(MY_NEWS_SOURCE, MODE_PRIVATE);
         Set<String> selectedNewsSourceSet = selectedNewsSource.getStringSet(MY_NEWS_SOURCE, null);
 
-        SharedPreferences remainingMyNewsPref =
-                getSharedPreferences(REMAINING_MY_NEWS, MODE_PRIVATE);
-        Set<String> remainingMyNewsSet = remainingMyNewsPref.getStringSet(REMAINING_MY_NEWS, null);
-
         SharedPreferences deletedMyNewsPref =
                 getSharedPreferences(DELETED_MY_NEWS, MODE_PRIVATE);
         Set<String> deletedMyNewsSet = deletedMyNewsPref.getStringSet(DELETED_MY_NEWS, null);
@@ -53,7 +47,6 @@ public class NewsSelectionActivity extends AppCompatActivity implements AddNewsF
 
         mSelectedNewsSourceList = new ArrayList<>();
         mDeletedMyNews = new ArrayList<>();
-        mRemainingMyNews = new ArrayList<>();
         mRemainingNewsSource = new ArrayList<>();
         if (selectedNewsSourceSet != null && selectedNewsSourceSet.size() != 0) {
             mSelectedNewsSourceList = new ArrayList<>(selectedNewsSourceSet);
@@ -61,34 +54,10 @@ public class NewsSelectionActivity extends AppCompatActivity implements AddNewsF
         if (deletedMyNewsSet != null && deletedMyNewsSet.size() != 0) {
             mDeletedMyNews = new ArrayList<>(deletedMyNewsSet);
         }
-        if (remainingMyNewsSet != null && remainingMyNewsSet.size() != 0) {
-            mRemainingMyNews = new ArrayList<>(remainingMyNewsSet);
-        }
 
         if (remainingNewsSourceSet != null && remainingNewsSourceSet.size() != 0) {
             mRemainingNewsSource = new ArrayList<>(remainingNewsSourceSet);
         }
-
-
-//        if (mRemainingNewsSource != null && mRemainingNewsSource.size() != 0 ) {
-//            if (mRemainingMyNews != null && mRemainingMyNews.size() != 0) {
-//                mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
-//                        mRemainingNewsSource, mRemainingMyNews, mDeletedMyNews);
-//            } else if (mRemainingMyNews != null && mRemainingMyNews.size() == 0){
-//                mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
-//                        newsSourceForAddition, mRemainingMyNews, mDeletedMyNews);
-//            }
-//        } else if (mRemainingNewsSource != null && mRemainingNewsSource.size() == 0){
-//            mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
-//                    mRemainingNewsSource, newsSourceForAddition, mDeletedMyNews);
-//        } else {
-//            mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
-//                    newsSourceForAddition, mRemainingMyNews, mDeletedMyNews);
-//        }
-
-
-// check  mRemainingNewsSource.addAll(mDeletedMyNews) size here first because it might have changed
-        // and also mSelectedNewsSourceList.removeAll(mDeletedMyNews) size. and then compare their current  size in the following if else statement.
 
         mRemainingNewsSource.addAll(mDeletedMyNews);
         mSelectedNewsSourceList.removeAll(mDeletedMyNews);
@@ -96,34 +65,18 @@ public class NewsSelectionActivity extends AppCompatActivity implements AddNewsF
         if (mRemainingNewsSource != null && mRemainingNewsSource.size() != 0) {
 
             if (mSelectedNewsSourceList != null && mSelectedNewsSourceList.size() == 0) {
-                Log.i("aaaaaa", "aaaaaa");
-                //mSelectedNewsSourceList.removeAll(mDeletedMyNews);
-                if (mDeletedMyNews.size() == 0) {
-                    mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
-                            mRemainingNewsSource, mSelectedNewsSourceList, mDeletedMyNews);
-                } else {
-                    mRemainingNewsSource.removeAll(mDeletedMyNews);
-                    mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
-                            mRemainingNewsSource, mSelectedNewsSourceList, mDeletedMyNews);
-                }
+                mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
+                        mRemainingNewsSource, mSelectedNewsSourceList, mDeletedMyNews);
             } else {
-                Log.i("aaaaaa", "bbbbbb");
-                //mRemainingNewsSource.addAll(mDeletedMyNews);
-                //mSelectedNewsSourceList.removeAll(mDeletedMyNews);
                 mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
                         mRemainingNewsSource, mSelectedNewsSourceList, mDeletedMyNews);
             }
         } else {
 
             if (mSelectedNewsSourceList != null && mSelectedNewsSourceList.size() == 0) {
-                Log.i("aaaaaa", "cccccc");
-                //mSelectedNewsSourceList.removeAll(mDeletedMyNews);
                 mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
                         newsSourceForAddition, mSelectedNewsSourceList, mDeletedMyNews);
             } else if (mSelectedNewsSourceList != null && mSelectedNewsSourceList.size() != 0) {
-                Log.i("aaaaaa", "dddddd");
-                //mRemainingNewsSource.addAll(mDeletedMyNews);
-                // mSelectedNewsSourceList.removeAll(mDeletedMyNews);
                 mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
                         mDeletedMyNews, mSelectedNewsSourceList, mDeletedMyNews);
             }
@@ -132,7 +85,6 @@ public class NewsSelectionActivity extends AppCompatActivity implements AddNewsF
         mSourceTabLayout = findViewById(R.id.news_selection_tab_layout);
         mSourceViewPager = findViewById(R.id.news_selection_view_pager);
         mSourceViewPager.setAdapter(mSourcePagerAdapter);
-
         mSourceTabLayout.setupWithViewPager(mSourceViewPager);
     }
 
@@ -146,4 +98,13 @@ public class NewsSelectionActivity extends AppCompatActivity implements AddNewsF
         }
     }
 
+    @Override
+    public void onNewsUpdate(ArrayList<String> myNewsDeleted) {
+        String tag = "android:switcher:" + R.id.news_selection_view_pager + ":" + 0;
+        AddNewsFragment addNewsFragment = (AddNewsFragment)
+                getSupportFragmentManager().findFragmentByTag(tag);
+        if (myNewsDeleted != null && myNewsDeleted.size() != 0) {
+            addNewsFragment.updateNews(myNewsDeleted);
+        }
+    }
 }

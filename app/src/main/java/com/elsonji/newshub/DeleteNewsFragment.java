@@ -28,6 +28,7 @@ public class DeleteNewsFragment extends Fragment implements OnNewsSourceClickLis
     private NewsSourceDeletionAdapter mNewsSourceDeletionAdapter;
     private LinearLayoutManager mSourceDeletionLayoutManager;
     private TextView mEmptyTextView;
+    private NewsUpdateListener mNewsUpdateListener;
 
 
     public static DeleteNewsFragment newInstance(ArrayList<String> data, ArrayList<String> deletedNewsData) {
@@ -88,6 +89,7 @@ public class DeleteNewsFragment extends Fragment implements OnNewsSourceClickLis
         set.addAll(mSourceDeletedFromMyNews);
         editor.putStringSet(DELETED_MY_NEWS, set);
         editor.apply();
+        mNewsUpdateListener.onNewsUpdate(mSourceDeletedFromMyNews);
 
         SharedPreferences remainingMyNews = getActivity().
                 getSharedPreferences(REMAINING_MY_NEWS, Context.MODE_PRIVATE);
@@ -104,9 +106,10 @@ public class DeleteNewsFragment extends Fragment implements OnNewsSourceClickLis
     }
 
     public void updateData(ArrayList<String> strings) {
+        mNewsSourcesForDeletion.addAll(strings);
         mNewsSourceDeletionAdapter = new NewsSourceDeletionAdapter(getContext(),
-                strings, this);
-        if (strings != null && strings.size() != 0) {
+                mNewsSourcesForDeletion, this);
+        if (mNewsSourcesForDeletion != null && mNewsSourcesForDeletion.size() != 0) {
             mEmptyTextView = getActivity().findViewById(R.id.delete_fragment_emtpy_text_view);
             mEmptyTextView.setVisibility(View.GONE);
         }
@@ -115,4 +118,17 @@ public class DeleteNewsFragment extends Fragment implements OnNewsSourceClickLis
         mNewsSourceDeletionRecyclerView.setLayoutManager(mSourceDeletionLayoutManager);
     }
 
+    public interface NewsUpdateListener {
+        void onNewsUpdate(ArrayList<String> myNewsDeleted);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof NewsUpdateListener) {
+            mNewsUpdateListener = (NewsUpdateListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + "must implement NewsUpdateListener");
+        }
+    }
 }
