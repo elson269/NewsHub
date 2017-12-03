@@ -11,21 +11,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.elsonji.newshub.NewsSourceAdditionAdapter.OnNewsSourceClickListener;
+import com.elsonji.newshub.NewsSourceAdapter.OnNewsSourceClickListener;
 
 import java.util.ArrayList;
 
-import static com.elsonji.newshub.NewsSourceAdditionAdapter.removeDashInString;
+import static com.elsonji.newshub.NewsSourceAdapter.removeDashInString;
 
-public class NewsSourceDeletionAdapter extends RecyclerView.Adapter
-        <NewsSourceDeletionAdapter.NewsSourceDeletionViewHolder>{
+public class MyNewsAdapter extends RecyclerView.Adapter
+        <MyNewsAdapter.NewsSourceDeletionViewHolder>{
 
     private Context mContext;
     private ArrayList<String> mNewsSourceDeletionList;
     private OnNewsSourceClickListener mListener;
 
-    public NewsSourceDeletionAdapter(Context context, ArrayList<String> newsSourceList,
-                                     OnNewsSourceClickListener listener) {
+    public MyNewsAdapter(Context context, ArrayList<String> newsSourceList,
+                         OnNewsSourceClickListener listener) {
         mContext = context;
         mNewsSourceDeletionList = removeDashInString(newsSourceList);
         mListener = listener;

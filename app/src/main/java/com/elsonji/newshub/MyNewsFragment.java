@@ -12,30 +12,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.elsonji.newshub.NewsSourceAdditionAdapter.OnNewsSourceClickListener;
+import com.elsonji.newshub.NewsSourceAdapter.OnNewsSourceClickListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DeleteNewsFragment extends Fragment implements OnNewsSourceClickListener {
+public class MyNewsFragment extends Fragment implements OnNewsSourceClickListener {
 
     public static final String NEWS_SOURCE_FOR_DELETION = "NEWS_SOURCE_FOR_DELETION";
     public static final String DELETED_MY_NEWS = "DELETED_MY_NEWS";
     public static final String REMAINING_MY_NEWS = "REMAINING_MY_NEWS";
     private ArrayList<String> mNewsSourcesForDeletion, mSourceDeletedFromMyNews;
     private RecyclerView mNewsSourceDeletionRecyclerView;
-    private NewsSourceDeletionAdapter mNewsSourceDeletionAdapter;
+    private NewsSourceAdapter mNewsSourceDeletionAdapter;
     private LinearLayoutManager mSourceDeletionLayoutManager;
     private TextView mEmptyTextView;
     private NewsUpdateListener mNewsUpdateListener;
 
 
-    public static DeleteNewsFragment newInstance(ArrayList<String> data, ArrayList<String> deletedNewsData) {
+    public static MyNewsFragment newInstance(ArrayList<String> data, ArrayList<String> deletedNewsData) {
         Bundle args = new Bundle();
         args.putStringArrayList(NEWS_SOURCE_FOR_DELETION, data);
         args.putStringArrayList(DELETED_MY_NEWS, deletedNewsData);
-        DeleteNewsFragment fragment = new DeleteNewsFragment();
+        MyNewsFragment fragment = new MyNewsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,14 +52,14 @@ public class DeleteNewsFragment extends Fragment implements OnNewsSourceClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_delete_news, container, false);
-        mNewsSourceDeletionRecyclerView = rootView.findViewById(R.id.delete_news_recycler_view);
-        mEmptyTextView = rootView.findViewById(R.id.delete_fragment_emtpy_text_view);
+        View rootView = inflater.inflate(R.layout.fragment_my_news, container, false);
+        mNewsSourceDeletionRecyclerView = rootView.findViewById(R.id.my_news_recycler_view);
+        mEmptyTextView = rootView.findViewById(R.id.my_news_fragment_emtpy_text_view);
         if (mNewsSourcesForDeletion != null && mNewsSourcesForDeletion.size() != 0) {
             mEmptyTextView.setVisibility(View.GONE);
         }
 
-        mNewsSourceDeletionAdapter = new NewsSourceDeletionAdapter(getContext(),
+        mNewsSourceDeletionAdapter = new NewsSourceAdapter(getContext(),
                 mNewsSourcesForDeletion, this);
         mNewsSourceDeletionRecyclerView.setAdapter(mNewsSourceDeletionAdapter);
         mSourceDeletionLayoutManager = new LinearLayoutManager(getContext());
@@ -72,11 +73,11 @@ public class DeleteNewsFragment extends Fragment implements OnNewsSourceClickLis
         if (mNewsSourcesForDeletion.size() != 0) {
             mNewsSourcesForDeletion.remove(mNewsSourcesForDeletion.get(position));
             if (mNewsSourcesForDeletion.size() == 0) {
-                mEmptyTextView = getActivity().findViewById(R.id.delete_fragment_emtpy_text_view);
+                mEmptyTextView = getActivity().findViewById(R.id.my_news_fragment_emtpy_text_view);
                 mEmptyTextView.setVisibility(View.VISIBLE);
             }
         } else {
-            mEmptyTextView = getActivity().findViewById(R.id.delete_fragment_emtpy_text_view);
+            mEmptyTextView = getActivity().findViewById(R.id.my_news_fragment_emtpy_text_view);
             mEmptyTextView.setVisibility(View.VISIBLE);
         }
 
@@ -89,7 +90,7 @@ public class DeleteNewsFragment extends Fragment implements OnNewsSourceClickLis
         set.addAll(mSourceDeletedFromMyNews);
         editor.putStringSet(DELETED_MY_NEWS, set);
         editor.apply();
-        mNewsUpdateListener.onNewsUpdate(mSourceDeletedFromMyNews);
+        mNewsUpdateListener.onNewsUpdate(set);
 
         SharedPreferences remainingMyNews = getActivity().
                 getSharedPreferences(REMAINING_MY_NEWS, Context.MODE_PRIVATE);
@@ -105,12 +106,17 @@ public class DeleteNewsFragment extends Fragment implements OnNewsSourceClickLis
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void updateData(ArrayList<String> strings) {
-        mNewsSourcesForDeletion.addAll(strings);
-        mNewsSourceDeletionAdapter = new NewsSourceDeletionAdapter(getContext(),
-                mNewsSourcesForDeletion, this);
-        if (mNewsSourcesForDeletion != null && mNewsSourcesForDeletion.size() != 0) {
-            mEmptyTextView = getActivity().findViewById(R.id.delete_fragment_emtpy_text_view);
+    public void updateData(Set<String> stringSet) {
+        //Convert mNewsSourcesForDeletion to Set to avoid duplicated items.
+        Set<String> newsForDeletionSet = new HashSet<>(mNewsSourcesForDeletion);
+        newsForDeletionSet.addAll(stringSet);
+
+        ArrayList<String> strings = new ArrayList<>(newsForDeletionSet);
+        Collections.sort(strings);
+
+        mNewsSourceDeletionAdapter = new NewsSourceAdapter(getContext(), strings, this);
+        if (strings.size() != 0) {
+            mEmptyTextView = getActivity().findViewById(R.id.my_news_fragment_emtpy_text_view);
             mEmptyTextView.setVisibility(View.GONE);
         }
         mNewsSourceDeletionRecyclerView.setAdapter(mNewsSourceDeletionAdapter);
@@ -119,7 +125,7 @@ public class DeleteNewsFragment extends Fragment implements OnNewsSourceClickLis
     }
 
     public interface NewsUpdateListener {
-        void onNewsUpdate(ArrayList<String> myNewsDeleted);
+        void onNewsUpdate(Set<String> myNewsDeleted);
     }
 
     @Override

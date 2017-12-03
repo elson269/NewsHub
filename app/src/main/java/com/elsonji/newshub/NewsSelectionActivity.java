@@ -8,13 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Set;
 
-import static com.elsonji.newshub.AddNewsFragment.REMAINING_NEWS_SOURCE;
-import static com.elsonji.newshub.DeleteNewsFragment.DELETED_MY_NEWS;
+import static com.elsonji.newshub.MyNewsFragment.DELETED_MY_NEWS;
+import static com.elsonji.newshub.NewsSourceFragment.REMAINING_NEWS_SOURCE;
 
 public class NewsSelectionActivity extends AppCompatActivity implements
-        AddNewsFragment.DataUpdateListener, DeleteNewsFragment.NewsUpdateListener {
+        NewsSourceFragment.DataUpdateListener, MyNewsFragment.NewsUpdateListener {
 
     public static final String MY_NEWS_SOURCE = "MY_NEWS_SOURCE";
     private TabLayout mSourceTabLayout;
@@ -31,6 +32,7 @@ public class NewsSelectionActivity extends AppCompatActivity implements
 
         ArrayList<String> newsSourceForAddition = new ArrayList<>(Arrays.asList(getResources().
                 getStringArray(R.array.dynamic_news_source)));
+        Collections.sort(newsSourceForAddition);
 
         SharedPreferences remainingNewsSource =
                 getSharedPreferences(REMAINING_NEWS_SOURCE, MODE_PRIVATE);
@@ -50,17 +52,22 @@ public class NewsSelectionActivity extends AppCompatActivity implements
         mRemainingNewsSource = new ArrayList<>();
         if (selectedNewsSourceSet != null && selectedNewsSourceSet.size() != 0) {
             mSelectedNewsSourceList = new ArrayList<>(selectedNewsSourceSet);
+            Collections.sort(mSelectedNewsSourceList);
         }
         if (deletedMyNewsSet != null && deletedMyNewsSet.size() != 0) {
             mDeletedMyNews = new ArrayList<>(deletedMyNewsSet);
+            Collections.sort(mDeletedMyNews);
         }
 
         if (remainingNewsSourceSet != null && remainingNewsSourceSet.size() != 0) {
             mRemainingNewsSource = new ArrayList<>(remainingNewsSourceSet);
+            Collections.sort(mRemainingNewsSource);
         }
 
         mRemainingNewsSource.addAll(mDeletedMyNews);
+        Collections.sort(mRemainingNewsSource);
         mSelectedNewsSourceList.removeAll(mDeletedMyNews);
+        Collections.sort(mSelectedNewsSourceList);
 
         if (mRemainingNewsSource != null && mRemainingNewsSource.size() != 0) {
 
@@ -89,9 +96,9 @@ public class NewsSelectionActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onDataUpdate(ArrayList<String> newsSourceChosen) {
+    public void onDataUpdate(Set<String> newsSourceChosen) {
         String tag = "android:switcher:" + R.id.news_selection_view_pager + ":" + 1;
-        DeleteNewsFragment deleteNewsFragment = (DeleteNewsFragment)
+        MyNewsFragment deleteNewsFragment = (MyNewsFragment)
                 getSupportFragmentManager().findFragmentByTag(tag);
         if (newsSourceChosen != null && newsSourceChosen.size() != 0) {
             deleteNewsFragment.updateData(newsSourceChosen);
@@ -99,9 +106,9 @@ public class NewsSelectionActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onNewsUpdate(ArrayList<String> myNewsDeleted) {
+    public void onNewsUpdate(Set<String> myNewsDeleted) {
         String tag = "android:switcher:" + R.id.news_selection_view_pager + ":" + 0;
-        AddNewsFragment addNewsFragment = (AddNewsFragment)
+        NewsSourceFragment addNewsFragment = (NewsSourceFragment)
                 getSupportFragmentManager().findFragmentByTag(tag);
         if (myNewsDeleted != null && myNewsDeleted.size() != 0) {
             addNewsFragment.updateNews(myNewsDeleted);

@@ -1,23 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.elsonji.newshub.DeleteNewsFragment"
+    tools:context="com.elsonji.newshub.NewsSourceFragment"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/delete_fragment_emtpy_text_view"
+        android:id="@+id/news_source_fragment_emtpy_text_view"
         android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/empty_text_view_delete_fragment"/>
+        android:text="@string/all_news_sources_added_empty_text_view"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/delete_news_recycler_view"
+        android:id="@+id/news_source_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
     </android.support.v7.widget.RecyclerView>
-
 
 </LinearLayout>

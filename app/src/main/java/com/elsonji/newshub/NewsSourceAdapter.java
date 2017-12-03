@@ -12,15 +12,15 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class NewsSourceAdditionAdapter extends RecyclerView.Adapter<NewsSourceAdditionAdapter.
+public class NewsSourceAdapter extends RecyclerView.Adapter<NewsSourceAdapter.
         NewsSourceViewHolder> {
 
     private Context mContext;
     private ArrayList<String> mNewsSourceList;
     private OnNewsSourceClickListener mListener;
 
-    public NewsSourceAdditionAdapter(Context context, ArrayList<String> newsSourceList,
-                                     OnNewsSourceClickListener listener) {
+    public NewsSourceAdapter(Context context, ArrayList<String> newsSourceList,
+                             OnNewsSourceClickListener listener) {
         mContext = context;
         mNewsSourceList = removeDashInString(newsSourceList);
         mListener = listener;

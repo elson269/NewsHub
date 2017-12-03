@@ -26,12 +26,12 @@ public class NewsSourceFragmentPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                mFragment = AddNewsFragment.newInstance(mNewsSource, mMyNewsSource);
+                mFragment = NewsSourceFragment.newInstance(mNewsSource, mMyNewsSource);
                 notifyDataSetChanged();
                 return mFragment;
             case 1:
                 //notifyDataSetChanged();
-                mFragment = DeleteNewsFragment.newInstance(mMyNewsSource, mDeletedNewsData);
+                mFragment = MyNewsFragment.newInstance(mMyNewsSource, mDeletedNewsData);
 
                 return mFragment;
             default:

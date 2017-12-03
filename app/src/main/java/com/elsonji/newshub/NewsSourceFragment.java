@@ -13,14 +13,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.elsonji.newshub.DeleteNewsFragment.DELETED_MY_NEWS;
+import static com.elsonji.newshub.MyNewsFragment.DELETED_MY_NEWS;
 import static com.elsonji.newshub.NewsSelectionActivity.MY_NEWS_SOURCE;
 
-public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapter.OnNewsSourceClickListener {
+public class NewsSourceFragment extends Fragment implements NewsSourceAdapter.OnNewsSourceClickListener {
     public static final String NEWS_SOURCE_FOR_ADDITION = "NEWS_SOURCE_FOR_ADDITION";
     public static final String REMAINING_NEWS_SOURCE = "REMAINING_NEWS_SOURCE";
     public static final String SELECTED_NEWS_SOURCE = "SELECTED_NEWS_SOURCE";
@@ -28,15 +29,15 @@ public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapt
     private ArrayList<String> mNewsSourceChosen;
     private TextView mEmptyTextView;
     private RecyclerView mNewsSourceAdditionRecyclerView;
-    private NewsSourceAdditionAdapter mNewsSourceAdditionAdapter;
+    private NewsSourceAdapter mNewsSourceAdditionAdapter;
     private LinearLayoutManager mSourceAdditionLayoutManager;
     private DataUpdateListener mDataUpdateListener;
 
-    public static AddNewsFragment newInstance(ArrayList<String> data, ArrayList<String> myNewsData) {
+    public static NewsSourceFragment newInstance(ArrayList<String> data, ArrayList<String> myNewsData) {
         Bundle args = new Bundle();
         args.putStringArrayList(NEWS_SOURCE_FOR_ADDITION, data);
         args.putStringArrayList(MY_NEWS_SOURCE, myNewsData);
-        AddNewsFragment fragment = new AddNewsFragment();
+        NewsSourceFragment fragment = new NewsSourceFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,15 +52,15 @@ public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapt
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_add_news, container, false);
-        mNewsSourceAdditionRecyclerView = rootView.findViewById(R.id.add_news_recycler_view);
-        mEmptyTextView = rootView.findViewById(R.id.add_fragment_emtpy_text_view);
+        View rootView = inflater.inflate(R.layout.fragment_news_source, container, false);
+        mNewsSourceAdditionRecyclerView = rootView.findViewById(R.id.news_source_recycler_view);
+        mEmptyTextView = rootView.findViewById(R.id.news_source_fragment_emtpy_text_view);
         if (mNewsSourcesForAddition != null && mNewsSourcesForAddition.size() != 0) {
             mEmptyTextView.setVisibility(View.GONE);
         }
 
         mNewsSourceAdditionAdapter =
-                new NewsSourceAdditionAdapter(getContext(), mNewsSourcesForAddition, this);
+                new NewsSourceAdapter(getContext(), mNewsSourcesForAddition, this);
         mNewsSourceAdditionRecyclerView.setAdapter(mNewsSourceAdditionAdapter);
         mSourceAdditionLayoutManager = new LinearLayoutManager(getContext());
         mNewsSourceAdditionRecyclerView.setLayoutManager(mSourceAdditionLayoutManager);
@@ -73,11 +74,11 @@ public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapt
         if (mNewsSourcesForAddition.size() != 0) {
             mNewsSourcesForAddition.remove(mNewsSourcesForAddition.get(position));
             if (mNewsSourcesForAddition.size() == 0) {
-                mEmptyTextView = getActivity().findViewById(R.id.add_fragment_emtpy_text_view);
+                mEmptyTextView = getActivity().findViewById(R.id.news_source_fragment_emtpy_text_view);
                 mEmptyTextView.setVisibility(View.VISIBLE);
             }
         } else {
-            mEmptyTextView = getActivity().findViewById(R.id.add_fragment_emtpy_text_view);
+            mEmptyTextView = getActivity().findViewById(R.id.news_source_fragment_emtpy_text_view);
             mEmptyTextView.setVisibility(View.VISIBLE);
         }
 
@@ -91,7 +92,7 @@ public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapt
         set.addAll(mNewsSourceChosen);
         editor.putStringSet(MY_NEWS_SOURCE, set);
         editor.apply();
-        mDataUpdateListener.onDataUpdate(mNewsSourceChosen);
+        mDataUpdateListener.onDataUpdate(set);
 
 
         SharedPreferences remainingNewsSharedPreferences = getActivity().
@@ -114,12 +115,18 @@ public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapt
     }
 
 
-    public void updateNews(ArrayList<String> myNewsDeleted) {
-        mNewsSourcesForAddition.removeAll(myNewsDeleted);
-        mNewsSourceAdditionAdapter = new NewsSourceAdditionAdapter(getContext(),
-                mNewsSourcesForAddition, this);
-        if (mNewsSourcesForAddition != null && mNewsSourcesForAddition.size() != 0) {
-            mEmptyTextView = getActivity().findViewById(R.id.add_fragment_emtpy_text_view);
+    public void updateNews(Set<String> stringSet) {
+        //Convert mNewsSourcesForAddition to Set to avoid duplicated items.
+
+        Set<String> myNewsDeletedSet = new HashSet<>(mNewsSourcesForAddition);
+        myNewsDeletedSet.addAll(stringSet);
+
+        ArrayList<String> myNewsDeleted = new ArrayList<>(myNewsDeletedSet);
+        Collections.sort(myNewsDeleted);
+
+        mNewsSourceAdditionAdapter = new NewsSourceAdapter(getContext(), myNewsDeleted, this);
+        if (myNewsDeleted.size() != 0) {
+            mEmptyTextView = getActivity().findViewById(R.id.news_source_fragment_emtpy_text_view);
             mEmptyTextView.setVisibility(View.GONE);
         }
         mNewsSourceAdditionRecyclerView.setAdapter(mNewsSourceAdditionAdapter);
@@ -128,7 +135,7 @@ public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapt
     }
 
     public interface DataUpdateListener {
-        void onDataUpdate(ArrayList<String> newsSourceChosen);
+        void onDataUpdate(Set<String> newsSourceChosen);
     }
 
     @Override
@@ -141,3 +148,4 @@ public class AddNewsFragment extends Fragment implements NewsSourceAdditionAdapt
         }
     }
 }
+
