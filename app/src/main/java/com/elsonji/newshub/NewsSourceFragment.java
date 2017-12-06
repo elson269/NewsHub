@@ -24,7 +24,6 @@ import static com.elsonji.newshub.NewsSelectionActivity.MY_NEWS_SOURCE;
 public class NewsSourceFragment extends Fragment implements NewsSourceAdapter.OnNewsSourceClickListener {
     public static final String NEWS_SOURCE_FOR_ADDITION = "NEWS_SOURCE_FOR_ADDITION";
     public static final String REMAINING_NEWS_SOURCE = "REMAINING_NEWS_SOURCE";
-    public static final String SELECTED_NEWS_SOURCE = "SELECTED_NEWS_SOURCE";
     private ArrayList<String> mNewsSourcesForAddition;
     private ArrayList<String> mNewsSourceChosen;
     private TextView mEmptyTextView;
@@ -45,6 +44,10 @@ public class NewsSourceFragment extends Fragment implements NewsSourceAdapter.On
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // setRetainInstance(true) is used to retain current ArrayList after rotation.
+        // News sources deleted from My News will disappear in the ArrayList after rotation if
+        // it is not used.
+        setRetainInstance(true);
         mNewsSourcesForAddition = getArguments().getStringArrayList(NEWS_SOURCE_FOR_ADDITION);
         mNewsSourceChosen = getArguments().getStringArrayList(MY_NEWS_SOURCE);
     }
@@ -71,6 +74,7 @@ public class NewsSourceFragment extends Fragment implements NewsSourceAdapter.On
     public void onSourceItemClick(View view, int position) {
 
         mNewsSourceChosen.add(mNewsSourcesForAddition.get(position));
+        Collections.sort(mNewsSourceChosen);
         if (mNewsSourcesForAddition.size() != 0) {
             mNewsSourcesForAddition.remove(mNewsSourcesForAddition.get(position));
             if (mNewsSourcesForAddition.size() == 0) {
@@ -82,7 +86,6 @@ public class NewsSourceFragment extends Fragment implements NewsSourceAdapter.On
             mEmptyTextView.setVisibility(View.VISIBLE);
         }
 
-
         SharedPreferences myNewsSharedPreferences = getActivity().
                 getSharedPreferences(MY_NEWS_SOURCE, MODE_PRIVATE);
         SharedPreferences.Editor editor = myNewsSharedPreferences.edit();
@@ -93,7 +96,6 @@ public class NewsSourceFragment extends Fragment implements NewsSourceAdapter.On
         editor.putStringSet(MY_NEWS_SOURCE, set);
         editor.apply();
         mDataUpdateListener.onDataUpdate(set);
-
 
         SharedPreferences remainingNewsSharedPreferences = getActivity().
                 getSharedPreferences(REMAINING_NEWS_SOURCE, MODE_PRIVATE);
@@ -112,23 +114,25 @@ public class NewsSourceFragment extends Fragment implements NewsSourceAdapter.On
         if (deletedMyNewsSet != null) {
             deletedMyNewsSet.clear();
         }
+
     }
 
 
-    public void updateNews(Set<String> stringSet) {
+    public void updateNews(Set<String> strings) {
         //Convert mNewsSourcesForAddition to Set to avoid duplicated items.
+        Set<String> remainingNewsSet = new HashSet<>(mNewsSourcesForAddition);
+        remainingNewsSet.addAll(strings);
+        ArrayList<String> remainingNewsList = new ArrayList<>(remainingNewsSet);
+        Collections.sort(remainingNewsList);
+        mNewsSourcesForAddition = new ArrayList<>(remainingNewsSet);
+        Collections.sort(mNewsSourcesForAddition);
 
-        Set<String> myNewsDeletedSet = new HashSet<>(mNewsSourcesForAddition);
-        myNewsDeletedSet.addAll(stringSet);
-
-        ArrayList<String> myNewsDeleted = new ArrayList<>(myNewsDeletedSet);
-        Collections.sort(myNewsDeleted);
-
-        mNewsSourceAdditionAdapter = new NewsSourceAdapter(getContext(), myNewsDeleted, this);
-        if (myNewsDeleted.size() != 0) {
+        mNewsSourceAdditionAdapter = new NewsSourceAdapter(getContext(), remainingNewsList, this);
+        if (remainingNewsList.size() != 0) {
             mEmptyTextView = getActivity().findViewById(R.id.news_source_fragment_emtpy_text_view);
             mEmptyTextView.setVisibility(View.GONE);
         }
+
         mNewsSourceAdditionRecyclerView.setAdapter(mNewsSourceAdditionAdapter);
         mSourceAdditionLayoutManager = new LinearLayoutManager(getContext());
         mNewsSourceAdditionRecyclerView.setLayoutManager(mSourceAdditionLayoutManager);

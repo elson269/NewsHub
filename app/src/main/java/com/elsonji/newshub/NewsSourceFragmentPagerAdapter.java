@@ -3,6 +3,8 @@ package com.elsonji.newshub;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,7 @@ public class NewsSourceFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Log.i("bbbbbbGetItem", "bbbbbbGetItem");
 
         switch (position) {
             case 0:
@@ -59,5 +62,12 @@ public class NewsSourceFragmentPagerAdapter extends FragmentPagerAdapter {
             default:
                 return null;
         }
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Object object =  super.instantiateItem(container, position);
+        mFragment = (Fragment) object;
+        return object;
     }
 }
