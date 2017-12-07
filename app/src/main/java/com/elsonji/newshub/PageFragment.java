@@ -49,6 +49,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         mNewsTabContent = getArguments().getString(ARG_PAGE);
         mLoaderId = getArguments().getInt(LOADER_ID);
     }

@@ -33,5 +33,6 @@ public class NewsListFragmentPagerAdapter extends FragmentStatePagerAdapter {
         return mNewsSource.get(position);
     }
 
+
 }
 

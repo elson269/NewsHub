@@ -3,8 +3,6 @@ package com.elsonji.newshub;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -20,20 +18,16 @@ public class NewsSourceFragmentPagerAdapter extends FragmentPagerAdapter {
         mNewsSource = newsSourceData;
         mMyNewsSource = myNewsData;
         mDeletedNewsData = myDeletedNewsData;
-        //notifyDataSetChanged();
     }
 
     @Override
     public Fragment getItem(int position) {
-        Log.i("bbbbbbGetItem", "bbbbbbGetItem");
-
         switch (position) {
             case 0:
                 mFragment = NewsSourceFragment.newInstance(mNewsSource, mMyNewsSource);
                 notifyDataSetChanged();
                 return mFragment;
             case 1:
-                //notifyDataSetChanged();
                 mFragment = MyNewsFragment.newInstance(mMyNewsSource, mDeletedNewsData);
 
                 return mFragment;
@@ -62,12 +56,5 @@ public class NewsSourceFragmentPagerAdapter extends FragmentPagerAdapter {
             default:
                 return null;
         }
-    }
-
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        Object object =  super.instantiateItem(container, position);
-        mFragment = (Fragment) object;
-        return object;
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +24,6 @@ public class NewsSelectionActivity extends AppCompatActivity implements
     private ArrayList<String> mSelectedNewsSourceList;
     private ArrayList<String> mRemainingNewsSource;
     private ArrayList<String> mDeletedMyNews;
-    private ArrayList<String> mCurrentNewsSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +66,6 @@ public class NewsSelectionActivity extends AppCompatActivity implements
 
             mRemainingNewsSource.addAll(mDeletedMyNews);
             Collections.sort(mRemainingNewsSource);
-            Log.i("aaaaaaNewsSelection", String.valueOf(mRemainingNewsSource.size()));
             mSelectedNewsSourceList.removeAll(mDeletedMyNews);
             Collections.sort(mSelectedNewsSourceList);
 
