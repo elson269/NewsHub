@@ -17,10 +17,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     private Context mContext;
     private ArrayList<News> mNews;
+    private OnNewsClickListener mNewsClickListener;
 
-    public NewsAdapter(Context context, ArrayList<News> news) {
+    public NewsAdapter(Context context, ArrayList<News> news, OnNewsClickListener listener) {
         mContext = context;
         mNews = news;
+        mNewsClickListener = listener;
     }
 
     @Override
@@ -28,8 +30,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
         LinearLayout itemView = (LinearLayout) LayoutInflater.from(mContext)
                 .inflate(R.layout.news_item, parent, false);
-        NewsViewHolder newsViewHolder = new NewsViewHolder(itemView);
-
+        final NewsViewHolder newsViewHolder = new NewsViewHolder(itemView);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            int positionClicked = newsViewHolder.getAdapterPosition();
+            @Override
+            public void onClick(View view) {
+                mNewsClickListener.onNewsClick(view, positionClicked);
+            }
+        });
         return newsViewHolder;
     }
 
@@ -71,5 +79,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     public void addNews(ArrayList<News> news) {
         mNews.addAll(news);
         notifyItemRangeInserted(0, news.size() - 1);
+    }
+
+    public interface OnNewsClickListener {
+        void onNewsClick(View view, int position);
     }
 }

@@ -107,5 +107,4 @@ public class NewsListActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putInt(POSITION, mTabLayout.getSelectedTabPosition() );
     }
-
 }

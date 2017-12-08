@@ -36,8 +36,7 @@ public class NewsSourceAdapter extends RecyclerView.Adapter<NewsSourceAdapter.
             public void onClick(View view) {
                 int positionClicked = newsSourceViewHolder.getAdapterPosition();
                 Toast.makeText(mContext, mNewsSourceList.get(positionClicked) + " " +
-                                mContext.getResources().getString(R.string.news_source_added),
-                        Toast.LENGTH_SHORT).show();
+                                mContext.getResources().getString(R.string.news_source_added), Toast.LENGTH_SHORT).show();
                 mNewsSourceList.remove(positionClicked);
                 notifyItemRemoved(positionClicked);
                 notifyItemRangeChanged(positionClicked, mNewsSourceList.size());

@@ -1,6 +1,7 @@
 package com.elsonji.newshub;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -21,7 +22,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class PageFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<News>> {
+public class PageFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<News>>,
+        NewsAdapter.OnNewsClickListener{
 
     private static final String ARG_PAGE = "ARG_PAGE";
     private static final String NEWS_BASE_URL = "https://newsapi.org/v1/articles?";
@@ -29,6 +31,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final String SORT_BY_PARAM = "sortBy";
     private static final String API_KEY_PARAM = "apiKey";
     public static final String LOADER_ID = "LOADER_ID";
+    public static final String NEWS_URL = "NEWS_URL";
     private String mNewsTabContent;
     private int mLoaderId;
     private ArrayList<News> mNews;
@@ -61,7 +64,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
 
         View rootView = inflater.inflate(R.layout.fragment_news_list, container, false);
         mNewsRecyclerView = rootView.findViewById(R.id.news_list_recycler_view);
-        mNewsAdapter = new NewsAdapter(getContext(), new ArrayList<News>());
+        mNewsAdapter = new NewsAdapter(getContext(), new ArrayList<News>(), this);
 
         mGridLayoutManager = new GridLayoutManager(getContext(), 1);
         mNewsRecyclerView.setAdapter(mNewsAdapter);
@@ -136,5 +139,12 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         return newsUrl;
     }
 
+    @Override
+    public void onNewsClick(View view, int position) {
+        String urlString = mNews.get(position + 1).getUrl();
+        Intent intent = new Intent(getContext(), WebViewActivity.class);
+        intent.putExtra(NEWS_URL, urlString);
+        startActivity(intent);
+    }
 }
 
