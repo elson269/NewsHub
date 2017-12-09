@@ -1,12 +1,12 @@
 package com.elsonji.newshub;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -28,13 +28,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @Override
     public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        LinearLayout itemView = (LinearLayout) LayoutInflater.from(mContext)
+        CardView itemView = (CardView) LayoutInflater.from(mContext)
                 .inflate(R.layout.news_item, parent, false);
         final NewsViewHolder newsViewHolder = new NewsViewHolder(itemView);
         itemView.setOnClickListener(new View.OnClickListener() {
-            int positionClicked = newsViewHolder.getAdapterPosition();
             @Override
             public void onClick(View view) {
+                int positionClicked = newsViewHolder.getAdapterPosition();
                 mNewsClickListener.onNewsClick(view, positionClicked);
             }
         });

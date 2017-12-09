@@ -23,8 +23,11 @@
         </activity>
         <activity
             android:name=".NewsSelectionActivity"
-            android:parentActivityName=".NewsListActivity"></activity>
-        <activity android:name=".WebViewActivity"></activity>
+            android:parentActivityName=".NewsListActivity">
+        </activity>
+        <activity android:name=".WebViewActivity"
+            android:parentActivityName=".NewsListActivity">
+        </activity>
     </application>
 
 </manifest>

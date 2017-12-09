@@ -141,7 +141,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onNewsClick(View view, int position) {
-        String urlString = mNews.get(position + 1).getUrl();
+        String urlString = mNews.get(position).getUrl();
         Intent intent = new Intent(getContext(), WebViewActivity.class);
         intent.putExtra(NEWS_URL, urlString);
         startActivity(intent);

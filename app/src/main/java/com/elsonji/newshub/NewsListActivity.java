@@ -80,7 +80,7 @@ public class NewsListActivity extends AppCompatActivity {
         mRemainingNewsSet = mRemainingNewsPref.getStringSet(REMAINING_MY_NEWS, null);
         if (mRemainingNewsSet != null) {
             mRemainingNewsSourceList = new ArrayList<>(mRemainingNewsSet);
-                mCurrentNewsSourceList.addAll(mRemainingNewsSourceList);
+            mCurrentNewsSourceList.addAll(mRemainingNewsSourceList);
         }
 
         mNewsListFragmentPagerAdapter = new NewsListFragmentPagerAdapter(getSupportFragmentManager(),
@@ -89,7 +89,12 @@ public class NewsListActivity extends AppCompatActivity {
         mViewPager.setAdapter(mNewsListFragmentPagerAdapter);
         mTabLayout = findViewById(R.id.sliding_tabs);
         mTabLayout.setupWithViewPager(mViewPager);
-
+        int tabPosition;
+        Intent intent = getIntent();
+        if (intent.getExtras() != null && intent.hasExtra(POSITION)) {
+            tabPosition = (int) intent.getExtras().get(POSITION);
+            mViewPager.setCurrentItem(tabPosition);
+        }
     }
 
     //Overriding onPause to avoid duplicated tabs chosen by user after returning back from
@@ -101,10 +106,16 @@ public class NewsListActivity extends AppCompatActivity {
         mCurrentNewsSourceList.addAll(mStaticNewsList);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getIntent().putExtra(POSITION, mTabLayout.getSelectedTabPosition());
+    }
+
     //Overriding onSaveInstanceState to stay on the selected tab after screen rotation.
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(POSITION, mTabLayout.getSelectedTabPosition() );
+        outState.putInt(POSITION, mTabLayout.getSelectedTabPosition());
     }
 }

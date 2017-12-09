@@ -19,5 +19,6 @@
     <string name="news_source_deleted">deleted from My News.</string>
     <string name="empty_text_view_delete_fragment">Currently, there are no news sources selected. To select a source, please go to the News Source tab.</string>
     <string name="all_news_sources_added_empty_text_view">All news sources have been added to My News</string>
+    <string name="news_time">News Released Time</string>
 
 </resources>
