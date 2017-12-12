@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,10 @@ public class MyNewsFragment extends Fragment implements OnNewsSourceClickListene
     private NewsUpdateListener mNewsUpdateListener;
     private SharedPreferences mRemainingNewsInMyNews;
     private SharedPreferences.Editor mRemainingMyNewsEditor;
+    private SharedPreferences mDeletedMyNewsSourcePref;
+    private SharedPreferences.Editor mDeletedMyNewsEditor;
     private Set<String> mRemainingMyNewsSet;
+    private Set<String> mSourceDeletedFromMyNewsSet;
 
 
     public static MyNewsFragment newInstance(ArrayList<String> data, ArrayList<String> deletedNewsData) {
@@ -51,7 +53,6 @@ public class MyNewsFragment extends Fragment implements OnNewsSourceClickListene
         mNewsSourcesForDeletion = getArguments().getStringArrayList(NEWS_SOURCE_FOR_DELETION);
         if (mNewsSourcesForDeletion != null) {
             Collections.sort(mNewsSourcesForDeletion);
-            Log.i("aaaaaa", String.valueOf(mNewsSourcesForDeletion.size()));
         }
         mSourceDeletedFromMyNews = getArguments().getStringArrayList(DELETED_MY_NEWS);
         if (mSourceDeletedFromMyNews != null) {
@@ -68,6 +69,10 @@ public class MyNewsFragment extends Fragment implements OnNewsSourceClickListene
                 getSharedPreferences(REMAINING_MY_NEWS, Context.MODE_PRIVATE);
         mRemainingMyNewsEditor = mRemainingNewsInMyNews.edit();
         mRemainingMyNewsEditor.apply();
+
+        mDeletedMyNewsSourcePref = getActivity().getSharedPreferences(DELETED_MY_NEWS, Context.MODE_PRIVATE);
+        mDeletedMyNewsEditor = mDeletedMyNewsSourcePref.edit();
+        mDeletedMyNewsEditor.apply();
 
         View rootView = inflater.inflate(R.layout.fragment_my_news, container, false);
         mNewsSourceDeletionRecyclerView = rootView.findViewById(R.id.my_news_recycler_view);
@@ -99,16 +104,13 @@ public class MyNewsFragment extends Fragment implements OnNewsSourceClickListene
             mEmptyTextView.setVisibility(View.VISIBLE);
         }
 
-        SharedPreferences deletedMyNewsSourcePref = getActivity().
-                getSharedPreferences(DELETED_MY_NEWS, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = deletedMyNewsSourcePref.edit();
 
         //Convert ArrayList to Set so it can be added to SharedPreferences.
-        Set<String> set = new HashSet<>();
-        set.addAll(mSourceDeletedFromMyNews);
-        editor.putStringSet(DELETED_MY_NEWS, set);
-        editor.apply();
-        mNewsUpdateListener.onNewsUpdate(set);
+        mSourceDeletedFromMyNewsSet = new HashSet<>();
+        mSourceDeletedFromMyNewsSet.addAll(mSourceDeletedFromMyNews);
+        mDeletedMyNewsEditor.putStringSet(DELETED_MY_NEWS, mSourceDeletedFromMyNewsSet);
+        mDeletedMyNewsEditor.apply();
+        mNewsUpdateListener.onNewsUpdate(mSourceDeletedFromMyNewsSet);
 
         Set<String> remainingNewsSet = new HashSet<>(mNewsSourcesForDeletion);
         mRemainingMyNewsEditor.putStringSet(REMAINING_MY_NEWS, remainingNewsSet);
@@ -124,6 +126,19 @@ public class MyNewsFragment extends Fragment implements OnNewsSourceClickListene
 
         mRemainingMyNewsEditor.putStringSet(REMAINING_MY_NEWS, mRemainingMyNewsSet);
         mRemainingMyNewsEditor.apply();
+
+        //When updateData is called in NewsSourceFragment, mSourceDeletedFromMyNewsSet needs to exclude
+        //the new selected item in NewsSourceFragment, otherwise MyNewsFragment will display the remaining
+        //ny news source from the last update.
+
+        SharedPreferences myNewsDeletedPref = getActivity().getSharedPreferences(DELETED_MY_NEWS,
+                Context.MODE_PRIVATE);
+        Set<String> myNewsDeletedSet = myNewsDeletedPref.getStringSet(DELETED_MY_NEWS, null);
+        if (myNewsDeletedSet != null) {
+            stringSet.removeAll(myNewsDeletedSet);
+            mDeletedMyNewsEditor.putStringSet(DELETED_MY_NEWS, stringSet);
+            mDeletedMyNewsEditor.apply();
+        }
 
         mNewsSourceDeletionAdapter = new NewsSourceAdapter(getContext(), strings, this);
         if (strings.size() != 0) {

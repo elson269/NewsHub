@@ -117,7 +117,6 @@ public class NewsSourceFragment extends Fragment implements NewsSourceAdapter.On
 
     }
 
-
     public void updateNews(Set<String> strings) {
         //Convert mNewsSourcesForAddition to Set to avoid duplicated items.
         Set<String> remainingNewsSet = new HashSet<>(mNewsSourcesForAddition);

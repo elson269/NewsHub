@@ -28,6 +28,12 @@
         <activity android:name=".WebViewActivity"
             android:parentActivityName=".NewsListActivity">
         </activity>
+
+        <provider
+            android:authorities="com.elsonji.newshub"
+            android:name=".data.NewsProvider"
+            android:permission="android.permission.MANAGE_DOCUMENTS"
+            android:exported="false"/>
     </application>
 
 </manifest>

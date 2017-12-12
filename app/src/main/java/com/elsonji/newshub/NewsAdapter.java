@@ -1,11 +1,13 @@
 package com.elsonji.newshub;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,10 +44,19 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     @Override
-    public void onBindViewHolder(NewsViewHolder holder, int position) {
+    public void onBindViewHolder(NewsViewHolder holder, final int position) {
         holder.newsTitleTextView.setText(mNews.get(position).getTitle());
         holder.newsDescriptionTextView.setText(mNews.get(position).getDescription());
         Picasso.with(mContext).load(mNews.get(position).getUrlToImage()).into(holder.newsImageView);
+        holder.shareImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, mNews.get(position).getUrl());
+                mContext.startActivity(shareIntent);
+            }
+        });
     }
 
     @Override
@@ -60,11 +71,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     public class NewsViewHolder extends RecyclerView.ViewHolder {
         TextView newsTitleTextView, newsDescriptionTextView;
         ImageView newsImageView;
+        ImageButton favoriteImageButton, shareImageButton;
         public NewsViewHolder(View itemView) {
             super(itemView);
-            newsTitleTextView = (TextView) itemView.findViewById(R.id.news_title_text_view);
-            newsDescriptionTextView = (TextView) itemView.findViewById(R.id.news_description_text_view);
-            newsImageView = (ImageView) itemView.findViewById(R.id.news_image_view);
+            newsTitleTextView = itemView.findViewById(R.id.news_title_text_view);
+            newsDescriptionTextView = itemView.findViewById(R.id.news_description_text_view);
+            newsImageView = itemView.findViewById(R.id.news_image_view);
+            favoriteImageButton = itemView.findViewById(R.id.favorite_button);
+            shareImageButton = itemView.findViewById(R.id.share_button);
         }
     }
 

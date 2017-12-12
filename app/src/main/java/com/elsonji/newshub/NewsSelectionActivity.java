@@ -22,6 +22,8 @@ public class NewsSelectionActivity extends AppCompatActivity implements
     private ViewPager mSourceViewPager;
     private NewsSourceFragmentPagerAdapter mSourcePagerAdapter;
     private ArrayList<String> mSelectedNewsSourceList;
+    //mRemainingNewsSource does not exist until the user clicks on the news source item to add it
+    //to My News.
     private ArrayList<String> mRemainingNewsSource;
     private ArrayList<String> mDeletedMyNews;
 
@@ -79,13 +81,12 @@ public class NewsSelectionActivity extends AppCompatActivity implements
                             mRemainingNewsSource, mSelectedNewsSourceList, mDeletedMyNews);
                 }
             } else {
-
                 if (mSelectedNewsSourceList != null && mSelectedNewsSourceList.size() == 0) {
                     mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
                             newsSourceForAddition, mSelectedNewsSourceList, mDeletedMyNews);
                 } else if (mSelectedNewsSourceList != null && mSelectedNewsSourceList.size() != 0) {
                     mSourcePagerAdapter = new NewsSourceFragmentPagerAdapter(getSupportFragmentManager(),
-                            mDeletedMyNews, mSelectedNewsSourceList, mDeletedMyNews);
+                            mRemainingNewsSource, newsSourceForAddition, mDeletedMyNews);
                 }
             }
 
