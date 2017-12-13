@@ -1,7 +1,10 @@
 package com.elsonji.newshub;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.elsonji.newshub.data.NewsContract.NewsEntry;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,6 +25,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     private Context mContext;
     private ArrayList<News> mNews;
     private OnNewsClickListener mNewsClickListener;
+    private int mFavoriteButtonUnclicked = R.drawable.ic_bookmark_border_24dp;
+    private int mFavortiteButtonClicked = R.drawable.ic_bookmark_24dp;
 
     public NewsAdapter(Context context, ArrayList<News> news, OnNewsClickListener listener) {
         mContext = context;
@@ -44,10 +51,31 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     @Override
-    public void onBindViewHolder(NewsViewHolder holder, final int position) {
+    public void onBindViewHolder(final NewsViewHolder holder, final int position) {
         holder.newsTitleTextView.setText(mNews.get(position).getTitle());
         holder.newsDescriptionTextView.setText(mNews.get(position).getDescription());
         Picasso.with(mContext).load(mNews.get(position).getUrlToImage()).into(holder.newsImageView);
+
+        Cursor favoriteNewsCursor = mContext.getContentResolver().query(NewsEntry.CONTENT_URI,
+                null, null, null, null, null);
+        String savedNewsUrl;
+        if (favoriteNewsCursor != null) {
+            favoriteNewsCursor.moveToFirst();
+            try {
+                while (!favoriteNewsCursor.isAfterLast()) {
+                    savedNewsUrl = favoriteNewsCursor.getString(favoriteNewsCursor.getColumnIndexOrThrow("url"));
+                    if (!savedNewsUrl.equals(mNews.get(position).getUrl())) {
+                        favoriteNewsCursor.moveToNext();
+                    } else {
+                        holder.favoriteImageButton.setImageResource(R.drawable.ic_bookmark_24dp);
+                        break;
+                    }
+                }
+            } finally {
+                favoriteNewsCursor.close();
+            }
+        }
+
         holder.shareImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,6 +83,30 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                 shareIntent.setType("text/plain");
                 shareIntent.putExtra(Intent.EXTRA_TEXT, mNews.get(position).getUrl());
                 mContext.startActivity(shareIntent);
+            }
+        });
+
+        holder.favoriteImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri newUri;
+                ContentValues values = new ContentValues();
+                values.put(NewsEntry.COLUMN_NEWS_TITLE, mNews.get(position).getTitle());
+                values.put(NewsEntry.COLUMN_NEWS_AUTHOR, mNews.get(position).getAuthor());
+                values.put(NewsEntry.COLUMN_NEWS_DESCRIPTION, mNews.get(position).getDescription());
+                values.put(NewsEntry.COLUMN_NEWS_URL, mNews.get(position).getUrl());
+                values.put(NewsEntry.COLUMN_NEWS_IMAGE_URL, mNews.get(position).getUrlToImage());
+                values.put(NewsEntry.COLUMN_NEWS_TIME, mNews.get(position).getPublishTime());
+                newUri = mContext.getContentResolver().insert(NewsEntry.CONTENT_URI, values);
+                if (newUri == null) {
+                    Toast.makeText(mContext, mContext.getString(R.string.add_favorite_fail_msg),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    holder.favoriteImageButton.setImageResource(mFavortiteButtonClicked);
+                    holder.favoriteImageButton.setTag(mFavortiteButtonClicked);
+                    Toast.makeText(mContext, mContext.getString(R.string.add_favorite_success_msg),
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
