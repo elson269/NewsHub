@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -115,9 +116,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                                 Toast.LENGTH_SHORT).show();
                     }
                     // The next else block is used to search the saved news' row id in the database.
-                }
-
-                else {
+                } else {
                     Cursor favoriteCursor = mContext.getContentResolver().query(NewsEntry.CONTENT_URI,
                             null, null, null, null, null);
                     int rowId = 1;
@@ -140,6 +139,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                         }
                     }
                     Uri newsToDeletedUri = ContentUris.withAppendedId(NewsEntry.CONTENT_URI, rowId);
+                    Log.i("aaaaaaaaaa", String.valueOf(rowId));
                     showDeleteConfirmationDialog(newsToDeletedUri, holder.favoriteImageButton);
                 }
             }

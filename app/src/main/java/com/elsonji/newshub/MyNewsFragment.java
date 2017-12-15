@@ -26,7 +26,7 @@ public class MyNewsFragment extends Fragment implements OnNewsSourceClickListene
     public static final String REMAINING_MY_NEWS = "REMAINING_MY_NEWS";
     private ArrayList<String> mNewsSourcesForDeletion, mSourceDeletedFromMyNews;
     private RecyclerView mNewsSourceDeletionRecyclerView;
-    private NewsSourceAdapter mNewsSourceDeletionAdapter;
+    private MyNewsAdapter mNewsSourceDeletionAdapter;
     private LinearLayoutManager mSourceDeletionLayoutManager;
     private TextView mEmptyTextView;
     private NewsUpdateListener mNewsUpdateListener;
@@ -81,7 +81,7 @@ public class MyNewsFragment extends Fragment implements OnNewsSourceClickListene
             mEmptyTextView.setVisibility(View.GONE);
         }
 
-        mNewsSourceDeletionAdapter = new NewsSourceAdapter(getContext(),
+        mNewsSourceDeletionAdapter = new MyNewsAdapter(getContext(),
                 mNewsSourcesForDeletion, this);
         mNewsSourceDeletionRecyclerView.setAdapter(mNewsSourceDeletionAdapter);
         mSourceDeletionLayoutManager = new LinearLayoutManager(getContext());
@@ -140,7 +140,7 @@ public class MyNewsFragment extends Fragment implements OnNewsSourceClickListene
             mDeletedMyNewsEditor.apply();
         }
 
-        mNewsSourceDeletionAdapter = new NewsSourceAdapter(getContext(), strings, this);
+        mNewsSourceDeletionAdapter = new MyNewsAdapter(getContext(), strings, this);
         if (strings.size() != 0) {
             mEmptyTextView = getActivity().findViewById(R.id.my_news_fragment_emtpy_text_view);
             mEmptyTextView.setVisibility(View.GONE);

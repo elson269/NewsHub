@@ -17,8 +17,7 @@ import java.util.ArrayList;
 
 import static com.elsonji.newshub.NewsSourceAdapter.removeDashInString;
 
-public class MyNewsAdapter extends RecyclerView.Adapter
-        <MyNewsAdapter.NewsSourceDeletionViewHolder>{
+public class MyNewsAdapter extends RecyclerView.Adapter<MyNewsAdapter.NewsSourceDeletionViewHolder>{
 
     private Context mContext;
     private ArrayList<String> mNewsSourceDeletionList;

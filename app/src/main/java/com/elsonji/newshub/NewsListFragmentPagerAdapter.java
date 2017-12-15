@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.util.ArrayList;
 
+import static com.elsonji.newshub.NewsSourceAdapter.removeDashInString;
+
 public class NewsListFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     private final ArrayList<String> mNewsSource;
@@ -30,9 +32,7 @@ public class NewsListFragmentPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mNewsSource.get(position);
+        return removeDashInString(mNewsSource).get(position);
     }
-
-
 }
 

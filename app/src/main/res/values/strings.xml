@@ -22,5 +22,7 @@
     <string name="news_time">News Released Time</string>
     <string name="add_favorite_fail_msg">Problem with adding news to My Favorite.</string>
     <string name="add_favorite_success_msg">News saved to My Favorite.</string>
+    <string name="saved_news">Saved News</string>
+    <string name="delete_news">Delete News</string>
 
 </resources>
