@@ -1,7 +1,6 @@
 package com.elsonji.newshub;
 
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import com.elsonji.newshub.data.NewsContract;
 
 import static com.elsonji.newshub.PageFragment.NEWS_URL;
-import static com.elsonji.newshub.data.NewsContract.NewsEntry.COLUMN_NEWS_URL;
 import static com.elsonji.newshub.data.NewsContract.NewsEntry.CONTENT_URI;
 
 public class SavedNewsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -41,19 +39,29 @@ public class SavedNewsActivity extends AppCompatActivity implements LoaderManage
 //                null, null, null, null);
 
         mListView = findViewById(R.id.saved_news_recycler_view);
-        mAdapter = new SavedNewsCursorAdapter(this, null, mId);
+        mAdapter = new SavedNewsCursorAdapter(this, null);
         mListView.setAdapter(mAdapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, final long id) {
                 mId = id;
                 Intent webViewIntent = new Intent(getApplicationContext(), SavedNewsWebViewActivity.class);
-                Uri currentNewsUri = ContentUris.withAppendedId(CONTENT_URI, id);
+               // Uri currentNewsUri = ContentUris.withAppendedId(CONTENT_URI, id);
                 mCursor.moveToPosition(position);
-                webViewIntent.putExtra(NEWS_URL, mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_NEWS_URL)));
-                webViewIntent.setData(currentNewsUri);
+                webViewIntent.putExtra(NEWS_URL, mCursor.getString(mCursor.
+                        getColumnIndexOrThrow(NewsContract.NewsEntry.COLUMN_NEWS_URL)));
+                //webViewIntent.setData(currentNewsUri);
                 getApplicationContext().startActivity(webViewIntent);
+
+//                ImageButton deleteImageButton = view.findViewById(R.id.delete_button);
+//                deleteImageButton.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        Uri uri = ContentUris.withAppendedId(CONTENT_URI, id);
+//                        showDeleteConfirmationDialog(uri);
+//                    }
+//                });
             }
         });
 
@@ -82,7 +90,7 @@ public class SavedNewsActivity extends AppCompatActivity implements LoaderManage
                             Toast.makeText(getApplicationContext(), "Error with deleting news",
                                     Toast.LENGTH_SHORT).show();
                         } else {
-                            mAdapter = new SavedNewsCursorAdapter(getApplicationContext(), null, mId);
+                            mAdapter = new SavedNewsCursorAdapter(getApplicationContext(), null);
                             mListView.setAdapter(mAdapter);
                             Toast.makeText(getApplicationContext(), "News deleted",
                                     Toast.LENGTH_SHORT).show();
@@ -112,7 +120,7 @@ public class SavedNewsActivity extends AppCompatActivity implements LoaderManage
                 NewsContract.NewsEntry.COLUMN_NEWS_TITLE,
                 NewsContract.NewsEntry.COLUMN_NEWS_AUTHOR,
                 NewsContract.NewsEntry.COLUMN_NEWS_DESCRIPTION,
-                COLUMN_NEWS_URL,
+                NewsContract.NewsEntry.COLUMN_NEWS_URL,
                 NewsContract.NewsEntry.COLUMN_NEWS_IMAGE_URL,
                 NewsContract.NewsEntry.COLUMN_NEWS_TIME
         };
@@ -128,6 +136,37 @@ public class SavedNewsActivity extends AppCompatActivity implements LoaderManage
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.swapCursor(null);
+    }
+
+    private void showDeleteConfirmationDialog(final Uri uri) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Delete this news?");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int id) {
+                if (uri != null) {
+                    int rowsDeleted = getContentResolver().delete(uri, null, null);
+                    if (rowsDeleted == 0) {
+                        Toast.makeText(getApplicationContext(), "Error with deleting news", Toast.LENGTH_SHORT).show();
+                    } else {
+                        //mCursor = context.getContentResolver().query(CONTENT_URI, null, null, null, null, null);
+                        //notifyDataSetChanged();
+                        Toast.makeText(getApplicationContext(), "News deleted", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int id) {
+                if (dialogInterface != null) {
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

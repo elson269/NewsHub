@@ -1,11 +1,11 @@
 package com.elsonji.newshub;
 
+import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,11 +28,10 @@ public class SavedNewsCursorAdapter extends CursorAdapter {
     private Context mContext;
     private long mId;
 
-    public SavedNewsCursorAdapter(Context context, Cursor cursor, long id) {
+    public SavedNewsCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
         mCursor = cursor;
         mContext = context;
-        mId = id;
     }
 
     @Override
@@ -75,17 +74,16 @@ public class SavedNewsCursorAdapter extends CursorAdapter {
 //                        null, null, null, null, null);
                // if (cursor != null) {
                     int rowId = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
-                   // try {
-                        Uri newsToDeletedUri = ContentUris.withAppendedId(CONTENT_URI, mId);
+                //int rowId = cursor.getPosition();
+                        Uri newsToDeletedUri = ContentUris.withAppendedId(CONTENT_URI, rowId);
                 //Uri newsToDeletedUri = ((Activity)context).getIntent().getData();
-                        Log.i("aaaaaabbbb", String.valueOf(rowId - 1));
+                        Log.i("aaaaaabbbb", String.valueOf(rowId));
                         showDeleteConfirmationDialog(newsToDeletedUri);
-//                    } finally {
-//                        cursor.close();
-//                    }
-                }
-            //}
 
+                }
+
+
+            //}
             private void showDeleteConfirmationDialog(final Uri uri) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setMessage("Delete this news?");
@@ -119,4 +117,5 @@ public class SavedNewsCursorAdapter extends CursorAdapter {
             }
         });
     }
+
 }
