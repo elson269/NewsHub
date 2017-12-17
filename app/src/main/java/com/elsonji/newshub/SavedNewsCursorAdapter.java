@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +19,11 @@ import com.elsonji.newshub.data.NewsContract.NewsEntry;
 import com.squareup.picasso.Picasso;
 
 import static com.elsonji.newshub.data.NewsContract.NewsEntry.CONTENT_URI;
-import static com.elsonji.newshub.data.NewsContract.NewsEntry._ID;
 
 public class SavedNewsCursorAdapter extends CursorAdapter {
 
-    private Cursor mCursor;
-    private Context mContext;
-    private long mId;
-
     public SavedNewsCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
-        mCursor = cursor;
-        mContext = context;
     }
 
     @Override
@@ -55,35 +47,16 @@ public class SavedNewsCursorAdapter extends CursorAdapter {
 
         TextView newsDescriptionTextView = view.findViewById(R.id.saved_news_description_text_view);
         newsDescriptionTextView.setText(newsDescription);
-//
-//        view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent webViewIntent = new Intent(context, SavedNewsWebViewActivity.class);
-//                webViewIntent.putExtra(NEWS_URL, newsUrl);
-//                context.startActivity(webViewIntent);
-//            }
-//        });
 
-
+        final long rowId = getItemId(cursor.getPosition());
         final ImageButton deleteImageButton = view.findViewById(R.id.delete_button);
         deleteImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Cursor favoriteCursor = context.getContentResolver().query(CONTENT_URI,
-//                        null, null, null, null, null);
-               // if (cursor != null) {
-                    int rowId = cursor.getInt(cursor.getColumnIndexOrThrow(_ID));
-                //int rowId = cursor.getPosition();
                         Uri newsToDeletedUri = ContentUris.withAppendedId(CONTENT_URI, rowId);
-                //Uri newsToDeletedUri = ((Activity)context).getIntent().getData();
-                        Log.i("aaaaaabbbb", String.valueOf(rowId));
                         showDeleteConfirmationDialog(newsToDeletedUri);
+            }
 
-                }
-
-
-            //}
             private void showDeleteConfirmationDialog(final Uri uri) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setMessage("Delete this news?");
@@ -95,8 +68,6 @@ public class SavedNewsCursorAdapter extends CursorAdapter {
                             if (rowsDeleted == 0) {
                                 Toast.makeText(context, "Error with deleting news", Toast.LENGTH_SHORT).show();
                             } else {
-                                //mCursor = context.getContentResolver().query(CONTENT_URI, null, null, null, null, null);
-                                //notifyDataSetChanged();
                                 Toast.makeText(context, "News deleted", Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -117,5 +88,4 @@ public class SavedNewsCursorAdapter extends CursorAdapter {
             }
         });
     }
-
 }
