@@ -36,7 +36,6 @@ public class SavedNewsCursorAdapter extends CursorAdapter {
     public void bindView(View view, final Context context, final Cursor cursor) {
         String newsTitle = cursor.getString(cursor.getColumnIndexOrThrow(NewsEntry.COLUMN_NEWS_TITLE));
         String newsDescription = cursor.getString(cursor.getColumnIndexOrThrow(NewsEntry.COLUMN_NEWS_DESCRIPTION));
-        final String newsUrl = cursor.getString(cursor.getColumnIndexOrThrow(NewsEntry.COLUMN_NEWS_URL));
         String newsImageUrl = cursor.getString(cursor.getColumnIndexOrThrow(NewsEntry.COLUMN_NEWS_IMAGE_URL));
 
         ImageView savedNewsImageView = view.findViewById(R.id.saved_news_image_view);
@@ -48,6 +47,7 @@ public class SavedNewsCursorAdapter extends CursorAdapter {
         TextView newsDescriptionTextView = view.findViewById(R.id.saved_news_description_text_view);
         newsDescriptionTextView.setText(newsDescription);
 
+        //Declaring rowId outside of onClick is to avoid undesired row id number.
         final long rowId = getItemId(cursor.getPosition());
         final ImageButton deleteImageButton = view.findViewById(R.id.delete_button);
         deleteImageButton.setOnClickListener(new View.OnClickListener() {
