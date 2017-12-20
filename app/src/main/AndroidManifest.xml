@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <receiver android:name="NewsWidgetProvider">
+        <receiver android:name=".NewsWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -22,6 +22,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/news_widget_provider_info" />
         </receiver>
+
         <activity
             android:name=".NewsListActivity"
             android:launchMode="singleTop">
@@ -33,10 +34,10 @@
         </activity>
         <activity
             android:name=".NewsSelectionActivity"
-            android:parentActivityName=".NewsListActivity"/>
+            android:parentActivityName=".NewsListActivity" />
         <activity
             android:name=".WebViewActivity"
-            android:parentActivityName=".NewsListActivity"/>
+            android:parentActivityName=".NewsListActivity" />
 
         <provider
             android:name=".data.NewsProvider"
@@ -46,15 +47,20 @@
 
         <activity
             android:name=".SavedNewsActivity"
-            android:parentActivityName=".NewsListActivity"/>
-
+            android:parentActivityName=".NewsListActivity" />
         <activity
             android:name=".SavedNewsWebViewActivity"
-            android:parentActivityName=".SavedNewsActivity"/>
+            android:parentActivityName=".SavedNewsActivity" />
 
         <service
             android:name=".ListViewWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name=".WidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

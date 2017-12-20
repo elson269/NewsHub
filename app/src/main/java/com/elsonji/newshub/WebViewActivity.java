@@ -25,7 +25,6 @@ public class WebViewActivity extends AppCompatActivity {
         if (extras != null) {
             webView.loadUrl(extras.getString(EXTRA_NEWS_URL));
         }
-
         webView.loadUrl(newsUrl);
     }
 }

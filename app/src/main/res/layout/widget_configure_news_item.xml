@@ -11,14 +11,14 @@
         android:layout_weight="1"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/news_source_change_button"
+        <RadioButton
+            android:id="@+id/news_widget_radio_button"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:padding="8dp"/>
 
         <TextView
-            android:id="@+id/news_source_text_view"
+            android:id="@+id/news_widget_text_view"
             android:gravity="center_vertical|start"
             android:paddingLeft="10dp"
             android:layout_width="0dp"
