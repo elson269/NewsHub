@@ -2,6 +2,7 @@ package com.elsonji.newshub;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -39,6 +40,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     private NewsAdapter mNewsAdapter;
     private GridLayoutManager mGridLayoutManager;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private static Resources mResources;
 
     public static PageFragment newInstance(String newsTabContent, int id) {
         Bundle args = new Bundle();
@@ -55,6 +57,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         setRetainInstance(true);
         mNewsTabContent = getArguments().getString(ARG_PAGE);
         mLoaderId = getArguments().getInt(LOADER_ID);
+        mResources = getResources();
     }
 
     @Nullable
@@ -95,9 +98,6 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         if (isConnected) {
             return new NewsLoader(getActivity(), createNewsUrl(mNewsTabContent, "top").toString());
         } else {
-//            Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.news_container),
-//                    getString(R.string.network_connection_error_message), Snackbar.LENGTH_SHORT);
-//            snackbar.show();
             Toast.makeText(getActivity(), getString(R.string.network_connection_error_message),
                     Toast.LENGTH_LONG).show();
             return null;
@@ -110,7 +110,6 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         mNewsAdapter.clearNews();
         if (news != null && !news.isEmpty()) {
             mNewsAdapter.addNews(mNews);
-            //mNewsAdapter.notifyDataSetChanged();
         } else {
             Toast.makeText(getActivity(), getString(R.string.news_not_available_warning),
                     Toast.LENGTH_LONG).show();
@@ -122,13 +121,13 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         mNewsAdapter.clearNews();
     }
 
-    public URL createNewsUrl(String sourceParam, String sortByParam) {
+    public static URL createNewsUrl(String sourceParam, String sortByParam) {
         URL newsUrl = null;
         Uri builtUri = Uri.parse(NEWS_BASE_URL)
                 .buildUpon()
                 .appendQueryParameter(SOURCE_PARAM, sourceParam)
                 .appendQueryParameter(SORT_BY_PARAM, sortByParam)
-                .appendQueryParameter(API_KEY_PARAM, getResources().getString(R.string.api_key))
+                .appendQueryParameter(API_KEY_PARAM, mResources.getString(R.string.api_key))
                 .build();
 
         try {

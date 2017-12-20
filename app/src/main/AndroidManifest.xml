@@ -48,8 +48,13 @@
             android:name=".SavedNewsActivity"
             android:parentActivityName=".NewsListActivity"/>
 
-        <activity android:name=".SavedNewsWebViewActivity"
+        <activity
+            android:name=".SavedNewsWebViewActivity"
             android:parentActivityName=".SavedNewsActivity"/>
+
+        <service
+            android:name=".ListViewWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 
+import static com.elsonji.newshub.ListRemoteViewFactory.EXTRA_NEWS_URL;
 import static com.elsonji.newshub.PageFragment.NEWS_URL;
 
 public class WebViewActivity extends AppCompatActivity {
@@ -18,6 +19,13 @@ public class WebViewActivity extends AppCompatActivity {
         String newsUrl = intentFromPageFrag.getStringExtra(NEWS_URL);
 
         WebView webView = findViewById(R.id.web_view);
+
+        Intent fillInIntent = getIntent();
+        Bundle extras = fillInIntent.getExtras();
+        if (extras != null) {
+            webView.loadUrl(extras.getString(EXTRA_NEWS_URL));
+        }
+
         webView.loadUrl(newsUrl);
     }
 }
