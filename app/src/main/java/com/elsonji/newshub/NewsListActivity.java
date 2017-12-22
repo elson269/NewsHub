@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import static com.elsonji.newshub.MyNewsFragment.REMAINING_MY_NEWS;
@@ -27,6 +28,7 @@ public class NewsListActivity extends AppCompatActivity {
     private SharedPreferences mRemainingNewsPref;
     private Set<String> mRemainingNewsSet;
     public static final String POSITION = "POSITION";
+    public static final String CURRENT_NEWS_SOURCE = "CURRENT_NEWS_SOURCE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,13 @@ public class NewsListActivity extends AppCompatActivity {
 
             mNewsListFragmentPagerAdapter = new NewsListFragmentPagerAdapter(getSupportFragmentManager(),
                     mCurrentNewsSourceList);
+            //selectedNewsPref is used to allow WidgetConfigureActivity to get current selected news data.
+            SharedPreferences currentNewsPref = getSharedPreferences(CURRENT_NEWS_SOURCE, MODE_PRIVATE);
+            SharedPreferences.Editor currentNewsPrefEditor = currentNewsPref.edit();
+            Set<String> currentNewsSet = new HashSet<>();
+            currentNewsSet.addAll(mCurrentNewsSourceList);
+            currentNewsPrefEditor.putStringSet(CURRENT_NEWS_SOURCE, currentNewsSet);
+            currentNewsPrefEditor.apply();
             mNewsListFragmentPagerAdapter.notifyDataSetChanged();
 
             mViewPager = findViewById(R.id.news_list_view_pager);

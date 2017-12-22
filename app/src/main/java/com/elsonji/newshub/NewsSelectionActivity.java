@@ -71,6 +71,8 @@ public class NewsSelectionActivity extends AppCompatActivity implements
             mSelectedNewsSourceList.removeAll(mDeletedMyNews);
             Collections.sort(mSelectedNewsSourceList);
 
+
+
             if (mRemainingNewsSource != null && mRemainingNewsSource.size() != 0) {
 
                 if (mSelectedNewsSourceList != null && mSelectedNewsSourceList.size() == 0) {

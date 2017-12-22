@@ -1,7 +1,5 @@
 package com.elsonji.newshub;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -21,21 +19,24 @@ import static com.elsonji.newshub.PageFragment.createNewsUrl;
 public class ListViewWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new ListRemoteViewFactory(getApplicationContext());
+        String string = intent.getStringExtra("newsString");
+        return new ListRemoteViewFactory(getApplicationContext(), string);
     }
 }
 
 class ListRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context mContext;
     private ArrayList<News> mNews;
+    private String mNewsString;
     public static final String EXTRA_NEWS_URL = "com.elsonji.newshub.NEWS_URL";
-    public ListRemoteViewFactory(Context context) {
+
+    public ListRemoteViewFactory(Context context, String string ) {
         mContext = context;
+        mNewsString = string;
     }
 
     @Override
     public void onCreate() {
-
     }
 
     @Override
@@ -46,7 +47,11 @@ class ListRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
 
-            URL recipesUrl = createNewsUrl("cnn", "top");
+//            SharedPreferences selectedWidgetSourcePref = mContext.
+//                    getSharedPreferences(WIDGET_SELECTED_STRING, Context.MODE_PRIVATE);
+//            String selectedSource = selectedWidgetSourcePref.getString(WIDGET_SELECTED_STRING, null);
+
+            URL recipesUrl = createNewsUrl(mNewsString, "top");
             String jsonResponse = " ";
             try {
                 jsonResponse = NetworkUtils.getResponseFromHttpUrl(recipesUrl);
@@ -54,11 +59,6 @@ class ListRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
                 e.printStackTrace();
             }
             mNews = NetworkUtils.extractNewsFromJson(jsonResponse);
-
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
-            int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(mContext, NewsWidgetProvider.class));
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
-
         }
     }
 
