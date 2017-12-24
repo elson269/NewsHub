@@ -27,10 +27,10 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         NewsAdapter.OnNewsClickListener{
 
     private static final String ARG_PAGE = "ARG_PAGE";
-    private static final String NEWS_BASE_URL = "https://newsapi.org/v1/articles?";
-    private static final String SOURCE_PARAM = "source";
-    private static final String SORT_BY_PARAM = "sortBy";
-    private static final String API_KEY_PARAM = "apiKey";
+    public static final String NEWS_BASE_URL = "https://newsapi.org/v1/articles?";
+    public static final String SOURCE_PARAM = "source";
+    public static final String SORT_BY_PARAM = "sortBy";
+    public static final String API_KEY_PARAM = "apiKey";
     public static final String LOADER_ID = "LOADER_ID";
     public static final String NEWS_URL = "NEWS_URL";
     private String mNewsTabContent;
@@ -121,7 +121,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         mNewsAdapter.clearNews();
     }
 
-    public static URL createNewsUrl(String sourceParam, String sortByParam) {
+    private URL createNewsUrl(String sourceParam, String sortByParam) {
         URL newsUrl = null;
         Uri builtUri = Uri.parse(NEWS_BASE_URL)
                 .buildUpon()

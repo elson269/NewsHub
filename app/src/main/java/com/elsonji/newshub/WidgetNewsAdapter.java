@@ -1,6 +1,7 @@
 package com.elsonji.newshub;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +16,15 @@ public class WidgetNewsAdapter extends RecyclerView.Adapter<WidgetNewsAdapter.Wi
     private Context mContext;
     private ArrayList<String> mNewsSourceList;
     private int mLastCheckedPosition = -1;
+    private int mAppWidgetId;
     public static final String WIDGET_SELECTED_STRING = "WIDGET_SELECTED_STRING";
     private OnWidgetSourceClickListener mWidgetListener;
 
-    public WidgetNewsAdapter(Context context, ArrayList<String> strings, OnWidgetSourceClickListener listener) {
+    public WidgetNewsAdapter(Context context, ArrayList<String> strings, OnWidgetSourceClickListener listener, int appWidgetId) {
         mContext = context;
         mNewsSourceList = strings;
         mWidgetListener = listener;
+        mAppWidgetId = appWidgetId;
     }
     @Override
     public WidgetNewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -41,13 +44,13 @@ public class WidgetNewsAdapter extends RecyclerView.Adapter<WidgetNewsAdapter.Wi
                 mLastCheckedPosition = holder.getAdapterPosition();
                 notifyDataSetChanged();
 
-//                SharedPreferences widgetSelectedNewsPref = mContext.getSharedPreferences(
-//                        WIDGET_SELECTED_STRING, Context.MODE_PRIVATE);
-//                SharedPreferences.Editor editor = widgetSelectedNewsPref.edit();
-//                editor.putString(WIDGET_SELECTED_STRING, mNewsSourceList.get(position));
-//                editor.apply();
+                SharedPreferences widgetSelectedNewsPref = mContext.getSharedPreferences(
+                        createTag(mAppWidgetId), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = widgetSelectedNewsPref.edit();
+                editor.putString(createTag(mAppWidgetId), mNewsSourceList.get(position));
+                editor.apply();
 
-                mWidgetListener.onWidgetSourceClick(view, position, mNewsSourceList.get(position));
+                mWidgetListener.onWidgetSourceClick(view, position);
             }
         });
     }
@@ -72,6 +75,10 @@ public class WidgetNewsAdapter extends RecyclerView.Adapter<WidgetNewsAdapter.Wi
     }
 
     public interface OnWidgetSourceClickListener {
-        void onWidgetSourceClick(View view, int position, String newsString);
+        void onWidgetSourceClick(View view, int position);
+    }
+
+    public static String createTag(int id) {
+        return WIDGET_SELECTED_STRING + id;
     }
 }

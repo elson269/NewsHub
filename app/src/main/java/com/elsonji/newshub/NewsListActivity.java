@@ -144,6 +144,11 @@ public class NewsListActivity extends AppCompatActivity {
             Intent savedNewsIntent = new Intent(this, SavedNewsActivity.class);
             startActivity(savedNewsIntent);
         }
+
+        if (itemClickedId == R.id.action_about) {
+            Intent aboutIntent = new Intent(this, AboutActivity.class);
+            startActivity(aboutIntent);
+        }
         return super.onOptionsItemSelected(item);
     }
 }

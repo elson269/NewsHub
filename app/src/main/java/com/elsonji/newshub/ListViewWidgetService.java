@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -11,28 +12,32 @@ import android.widget.RemoteViewsService;
 import com.elsonji.newshub.Network.NetworkUtils;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import static com.elsonji.newshub.PageFragment.createNewsUrl;
+import static com.elsonji.newshub.PageFragment.API_KEY_PARAM;
+import static com.elsonji.newshub.PageFragment.NEWS_BASE_URL;
+import static com.elsonji.newshub.PageFragment.SORT_BY_PARAM;
+import static com.elsonji.newshub.PageFragment.SOURCE_PARAM;
 
 public class ListViewWidgetService extends RemoteViewsService {
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        String string = intent.getStringExtra("newsString");
-        return new ListRemoteViewFactory(getApplicationContext(), string);
+
+        return new ListRemoteViewFactory(getApplicationContext(), intent);
     }
 }
 
 class ListRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context mContext;
     private ArrayList<News> mNews;
-    private String mNewsString;
     public static final String EXTRA_NEWS_URL = "com.elsonji.newshub.NEWS_URL";
+    private String mSelectedNewsString;
 
-    public ListRemoteViewFactory(Context context, String string ) {
+    public ListRemoteViewFactory(Context context, Intent intent) {
         mContext = context;
-        mNewsString = string;
+        mSelectedNewsString = String.valueOf(intent.getData().getEncodedSchemeSpecificPart());
     }
 
     @Override
@@ -47,11 +52,7 @@ class ListRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
 
-//            SharedPreferences selectedWidgetSourcePref = mContext.
-//                    getSharedPreferences(WIDGET_SELECTED_STRING, Context.MODE_PRIVATE);
-//            String selectedSource = selectedWidgetSourcePref.getString(WIDGET_SELECTED_STRING, null);
-
-            URL recipesUrl = createNewsUrl(mNewsString, "top");
+            URL recipesUrl = createNewsUrl(mSelectedNewsString, "top");
             String jsonResponse = " ";
             try {
                 jsonResponse = NetworkUtils.getResponseFromHttpUrl(recipesUrl);
@@ -59,6 +60,8 @@ class ListRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
                 e.printStackTrace();
             }
             mNews = NetworkUtils.extractNewsFromJson(jsonResponse);
+            if (mNews != null) {
+            }
         }
     }
 
@@ -112,5 +115,22 @@ class ListRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public boolean hasStableIds() {
         return true;
+    }
+
+    private URL createNewsUrl(String sourceParam, String sortByParam) {
+        URL newsUrl = null;
+        Uri builtUri = Uri.parse(NEWS_BASE_URL)
+                .buildUpon()
+                .appendQueryParameter(SOURCE_PARAM, sourceParam)
+                .appendQueryParameter(SORT_BY_PARAM, sortByParam)
+                .appendQueryParameter(API_KEY_PARAM, mContext.getString(R.string.api_key))
+                .build();
+
+        try {
+            newsUrl = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return newsUrl;
     }
 }

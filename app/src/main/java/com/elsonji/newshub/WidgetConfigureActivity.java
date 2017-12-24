@@ -18,7 +18,6 @@ import static com.elsonji.newshub.NewsListActivity.CURRENT_NEWS_SOURCE;
 public class WidgetConfigureActivity extends AppCompatActivity implements
         WidgetNewsAdapter.OnWidgetSourceClickListener {
     private int mAppWidgetId;
-    private static String mNewsStringFromConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +43,7 @@ public class WidgetConfigureActivity extends AppCompatActivity implements
 
             selectedNewsSource = new ArrayList<>(selectedNewsSourceSet);
             Collections.sort(selectedNewsSource);
-            WidgetNewsAdapter mWidgetNewsAdapter = new WidgetNewsAdapter(this, selectedNewsSource, this);
+            WidgetNewsAdapter mWidgetNewsAdapter = new WidgetNewsAdapter(this, selectedNewsSource, this, mAppWidgetId);
             RecyclerView mWidgetNewsRecyclerView = findViewById(R.id.widget_config_recycler_view);
             LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
             mWidgetNewsRecyclerView.setAdapter(mWidgetNewsAdapter);
@@ -53,10 +52,9 @@ public class WidgetConfigureActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onWidgetSourceClick(View view, int position, String newsString) {
-        mNewsStringFromConfig = newsString;
+    public void onWidgetSourceClick(View view, int position) {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-        NewsWidgetProvider.updateAppWidget(this, appWidgetManager, mAppWidgetId, newsString);
+        NewsWidgetProvider.updateAppWidget(this, appWidgetManager, mAppWidgetId);
 
         Intent resultValue = new Intent();
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
@@ -64,7 +62,4 @@ public class WidgetConfigureActivity extends AppCompatActivity implements
         finish();
     }
 
-    public static String getNewsSourceFromConfig() {
-        return mNewsStringFromConfig;
-    }
 }

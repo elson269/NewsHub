@@ -5,6 +5,6 @@
     android:minWidth="200dp"
     android:previewImage="@drawable/news"
     android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="18000000"
+    android:updatePeriodMillis="1800000"
     android:configure="com.elsonji.newshub.WidgetConfigureActivity"
     android:widgetCategory="home_screen"/>

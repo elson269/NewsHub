@@ -24,5 +24,13 @@
     <string name="add_favorite_success_msg">News saved to My Favorite.</string>
     <string name="saved_news">Saved News</string>
     <string name="delete_news">Delete News</string>
+    <string name="about_label">About</string>
+    <string name="about_content">News Hub hosts news headlines that are currently published on a range of news sources and
+                                 blogs, for example, CNN, CNBC, BBC, etc. This is your one-stop shop for all the top news all
+                                 around the world. With News Hub, you can save yourself a lot of time from switching app to app
+                                 to get the news you need.</string>
+    <string name="powered_by">Powered by newsapi.org</string>
+    <string name="news_source">News Source</string>
+    <string name="select_news_source_msg">Please select a news source below.</string>
 
 </resources>
