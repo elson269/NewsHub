@@ -8,6 +8,7 @@
     tools:context="com.elsonji.newshub.NewsListActivity">
 
     <LinearLayout
+        android:id="@+id/tab_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -28,13 +29,9 @@
 
     </LinearLayout>
 
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/news_list_view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-
-
+    <android.support.v4.view.ViewPager
+        android:id="@+id/news_list_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

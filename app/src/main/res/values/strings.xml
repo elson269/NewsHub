@@ -32,5 +32,6 @@
     <string name="powered_by">Powered by newsapi.org</string>
     <string name="news_source">News Source</string>
     <string name="select_news_source_msg">Please select a news source below.</string>
+    <string name="skip">Skip</string>
 
 </resources>

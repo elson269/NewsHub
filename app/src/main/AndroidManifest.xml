@@ -26,11 +26,7 @@
         <activity
             android:name=".NewsListActivity"
             android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".NewsSelectionActivity"
@@ -56,15 +52,24 @@
             android:name=".ListViewWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <activity android:name=".WidgetConfigureActivity"
+        <activity
+            android:name=".WidgetConfigureActivity"
             android:label="@string/news_source">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <activity android:name=".AboutActivity"
+        <activity
+            android:name=".AboutActivity"
             android:label="@string/about_label"
-            android:parentActivityName=".NewsListActivity"/>
+            android:parentActivityName=".NewsListActivity" />
+        <activity android:name=".LogInActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

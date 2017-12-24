@@ -60,8 +60,6 @@ class ListRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
                 e.printStackTrace();
             }
             mNews = NetworkUtils.extractNewsFromJson(jsonResponse);
-            if (mNews != null) {
-            }
         }
     }
 
