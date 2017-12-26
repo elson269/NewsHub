@@ -15,4 +15,16 @@
         android:title="@string/about_label"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/action_sign_in"
+        android:orderInCategory="3"
+        android:title="@string/sign_in"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_sign_out"
+        android:orderInCategory="4"
+        android:title="@string/sign_out"
+        app:showAsAction="never"/>
+
 </menu>

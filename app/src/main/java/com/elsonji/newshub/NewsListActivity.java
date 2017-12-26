@@ -3,6 +3,7 @@ package com.elsonji.newshub;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -11,11 +12,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.elsonji.newshub.LogInActivity.GOOGLE_SIGN_IN_USED;
 import static com.elsonji.newshub.MyNewsFragment.REMAINING_MY_NEWS;
 
 public class NewsListActivity extends AppCompatActivity {
@@ -27,6 +33,8 @@ public class NewsListActivity extends AppCompatActivity {
     private ArrayList<String> mRemainingNewsSourceList, mCurrentNewsSourceList, mStaticNewsList;
     private SharedPreferences mRemainingNewsPref;
     private Set<String> mRemainingNewsSet;
+    private GoogleSignInClient mGoogleSignInClient;
+    private boolean mGoogleSignInStatus;
     public static final String POSITION = "POSITION";
     public static final String CURRENT_NEWS_SOURCE = "CURRENT_NEWS_SOURCE";
 
@@ -34,6 +42,7 @@ public class NewsListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
+
 
         String[] staticNewsSources = {"cnn", "cnbc", "reuters"};
         mStaticNewsList = new ArrayList<>(Arrays.asList(staticNewsSources));
@@ -48,6 +57,15 @@ public class NewsListActivity extends AppCompatActivity {
             }
         });
 
+        Intent intentFromSignInActivity = getIntent();
+        mGoogleSignInStatus = intentFromSignInActivity.getBooleanExtra(GOOGLE_SIGN_IN_USED, true);
+        if (mGoogleSignInStatus) {
+            invalidateOptionsMenu();
+        }
+        if (!mGoogleSignInStatus) {
+            invalidateOptionsMenu();
+        }
+
         if (savedInstanceState == null) {
 
             mRemainingNewsPref = getSharedPreferences(REMAINING_MY_NEWS, MODE_PRIVATE);
@@ -59,7 +77,7 @@ public class NewsListActivity extends AppCompatActivity {
 
             mNewsListFragmentPagerAdapter = new NewsListFragmentPagerAdapter(getSupportFragmentManager(),
                     mCurrentNewsSourceList);
-            //selectedNewsPref is used to allow WidgetConfigureActivity to get current selected news data.
+            //currentNewsPref is used to allow WidgetConfigureActivity to get current selected news data.
             SharedPreferences currentNewsPref = getSharedPreferences(CURRENT_NEWS_SOURCE, MODE_PRIVATE);
             SharedPreferences.Editor currentNewsPrefEditor = currentNewsPref.edit();
             Set<String> currentNewsSet = new HashSet<>();
@@ -133,6 +151,12 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.news_list_activity_menu, menu);
+        if (!mGoogleSignInStatus) {
+            menu.findItem(R.id.action_sign_out).setVisible(false);
+        }
+        if (mGoogleSignInStatus) {
+            menu.findItem(R.id.action_sign_in).setVisible(false);
+        }
         return true;
     }
 
@@ -149,9 +173,32 @@ public class NewsListActivity extends AppCompatActivity {
             Intent aboutIntent = new Intent(this, AboutActivity.class);
             startActivity(aboutIntent);
         }
+
+        if (itemClickedId == R.id.action_sign_out) {
+            mGoogleSignInClient = GoogleSignInClientSingleton.getInstance(null).getGoogleSignInClient();
+            signOut();
+        }
+
+        if (itemClickedId == R.id.action_sign_in) {
+            //Go back to LogInActivity by calling finish().
+            //Cannot use intent to go back as this activity is started by LogInActivity.
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed() {
+    }
+
+    private void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        finish();
+                    }
+                });
+    }
+
 }

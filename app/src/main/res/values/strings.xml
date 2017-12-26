@@ -33,5 +33,7 @@
     <string name="news_source">News Source</string>
     <string name="select_news_source_msg">Please select a news source below.</string>
     <string name="skip">Skip</string>
+    <string name="sign_out">Sign out</string>
+    <string name="sign_in">Sign in</string>
 
 </resources>
