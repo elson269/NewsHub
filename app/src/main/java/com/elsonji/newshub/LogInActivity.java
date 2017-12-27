@@ -36,6 +36,7 @@ public class LogInActivity extends AppCompatActivity {
             mGoogleSignInSkipped = mSignInStatusPref.getBoolean(GOOGLE_SIGN_IN_SKIPPED, false);
         }
 
+
         if (!mGoogleSignInSkipped) {
             Button skipButton = findViewById(R.id.skip_button);
             skipButton.setOnClickListener(new View.OnClickListener() {
@@ -69,17 +70,17 @@ public class LogInActivity extends AppCompatActivity {
             signInButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mGoogleSignInSkipped = false;
+
+                    mSignInStatusPref = getSharedPreferences(GOOGLE_SIGN_IN_SKIPPED, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = mSignInStatusPref.edit();
+                    editor.putBoolean(GOOGLE_SIGN_IN_SKIPPED, mGoogleSignInSkipped);
+                    editor.apply();
+
                     signIn();
                 }
             });
-
-        } else {
-            Intent mainActivityIntent = new Intent(getApplicationContext(), NewsListActivity.class);
-            mGoogleSignInUsed = false;
-            mainActivityIntent.putExtra(GOOGLE_SIGN_IN_USED, mGoogleSignInUsed);
-            startActivity(mainActivityIntent);
         }
-
     }
 
     private void signIn() {
@@ -125,6 +126,10 @@ public class LogInActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mGoogleSignInSkipped = false;
+    }
 
 }

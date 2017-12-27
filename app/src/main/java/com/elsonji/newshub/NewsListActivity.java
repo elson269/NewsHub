@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.elsonji.newshub.LogInActivity.GOOGLE_SIGN_IN_SKIPPED;
 import static com.elsonji.newshub.LogInActivity.GOOGLE_SIGN_IN_USED;
 import static com.elsonji.newshub.MyNewsFragment.REMAINING_MY_NEWS;
 
@@ -180,6 +181,11 @@ public class NewsListActivity extends AppCompatActivity {
         }
 
         if (itemClickedId == R.id.action_sign_in) {
+            //Reset mGoogleSignInSkipped in LogInActivity to false to clean out previously registered mGoogleSignInSkipped status.
+            SharedPreferences mSignInStatusPref = getSharedPreferences(GOOGLE_SIGN_IN_SKIPPED, MODE_PRIVATE);
+            SharedPreferences.Editor editor = mSignInStatusPref.edit();
+            editor.putBoolean(GOOGLE_SIGN_IN_SKIPPED, false);
+            editor.apply();
             //Go back to LogInActivity by calling finish().
             //Cannot use intent to go back as this activity is started by LogInActivity.
             finish();
