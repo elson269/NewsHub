@@ -15,12 +15,14 @@
             android:id="@+id/news_source_change_button"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:padding="8dp"/>
+            android:padding="8dp"
+            android:contentDescription="@string/add_news_source" />
 
         <TextView
             android:id="@+id/news_source_text_view"
             android:gravity="center_vertical|start"
             android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -30,6 +32,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/colorGrey"/>
+        android:background="@color/colorGrey"
+        android:contentDescription="@null"/>
 
 </LinearLayout>

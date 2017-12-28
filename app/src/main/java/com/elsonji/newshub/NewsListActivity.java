@@ -12,6 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -36,6 +39,7 @@ public class NewsListActivity extends AppCompatActivity {
     private Set<String> mRemainingNewsSet;
     private GoogleSignInClient mGoogleSignInClient;
     private boolean mGoogleSignInStatus;
+    private AdView mAdView;
     public static final String POSITION = "POSITION";
     public static final String CURRENT_NEWS_SOURCE = "CURRENT_NEWS_SOURCE";
 
@@ -44,6 +48,10 @@ public class NewsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
+        MobileAds.initialize(this, getString(R.string.app_id));
+        mAdView = findViewById(R.id.ad_view);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         String[] staticNewsSources = {"cnn", "cnbc", "reuters"};
         mStaticNewsList = new ArrayList<>(Arrays.asList(staticNewsSources));
