@@ -7,12 +7,17 @@
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="4dp"
     android:layout_margin="5dp"
+    android:focusable="true"
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?android:attr/selectableItemBackground"
+        android:descendantFocusability="beforeDescendants"
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/news_image_view"
@@ -42,7 +47,8 @@
                 android:layout_weight="2"
                 android:background="@color/colorBackground"
                 android:src="@drawable/ic_bookmark_border_24dp"
-                android:contentDescription="@string/bookmark" />
+                android:contentDescription="@string/bookmark"
+                android:focusable="true"/>
 
             <ImageButton
                 android:id="@+id/share_button"
@@ -53,7 +59,8 @@
                 android:layout_weight="1"
                 android:background="@color/colorBackground"
                 android:src="@drawable/ic_share_24dp"
-                android:contentDescription="@string/share" />
+                android:contentDescription="@string/share"
+                android:focusable="true"/>
 
         </LinearLayout>
 
