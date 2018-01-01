@@ -15,10 +15,23 @@
         android:gravity="start"
         android:padding="10dp" />
 
+    <ImageView
+        android:id="@+id/powered_by_google"
+        android:layout_width="150dp"
+        android:layout_height="25dp"
+        android:src="@drawable/powered_by_google"
+        android:layout_gravity="start"
+        android:paddingLeft="10dp"
+        android:contentDescription="@string/powered_by_google"
+        android:paddingStart="10dp"
+        tools:ignore="RtlSymmetry" />
+
     <TextView
         android:id="@+id/powered_by"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="@string/powered_by"
         android:padding="10dp"/>
+
+
 </LinearLayout>

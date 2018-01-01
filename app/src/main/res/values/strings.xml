@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">News Hub</string>
+    <string name="api_key">2b62324bfb41493bb49e3bb19073d484</string>
+    <string name="app_id">ca-app-pub-7833510354697604~1969788534</string>
     <string name="cnn">CNN</string>
     <string name="bbc">BBC</string>
     <string name="cnbc">CNBC</string>
@@ -40,5 +42,12 @@
     <string name="share">share</string>
     <string name="delete">delete</string>
     <string name="radio_button">radio button</string>
+    <string name="powered_by_google">powered_by_google</string>
+    <string name="delete_all_news">Delete all news?</string>
+    <string name="error_with_deleting_news">Error with deleting news.</string>
+    <string name="news_deleted">News deleted.</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_news_to_delete">Currently, there are no news to delete.</string>
+    <string name="no_bookmarked_news">Currently, you have no bookmarked news.</string>
 
 </resources>

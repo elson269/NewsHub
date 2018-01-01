@@ -22,8 +22,11 @@ import static com.elsonji.newshub.data.NewsContract.NewsEntry.CONTENT_URI;
 
 public class SavedNewsCursorAdapter extends CursorAdapter {
 
-    public SavedNewsCursorAdapter(Context context, Cursor cursor) {
+    private OnDeleteListener mListener;
+
+    public SavedNewsCursorAdapter(Context context, Cursor cursor, OnDeleteListener listener) {
         super(context, cursor, 0);
+        mListener = listener;
     }
 
     @Override
@@ -53,28 +56,29 @@ public class SavedNewsCursorAdapter extends CursorAdapter {
         deleteImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                        Uri newsToDeletedUri = ContentUris.withAppendedId(CONTENT_URI, rowId);
-                        showDeleteConfirmationDialog(newsToDeletedUri);
+                Uri newsToDeletedUri = ContentUris.withAppendedId(CONTENT_URI, rowId);
+                showDeleteConfirmationDialog(newsToDeletedUri);
             }
 
             private void showDeleteConfirmationDialog(final Uri uri) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setMessage("Delete this news?");
-                builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                builder.setMessage(R.string.delete_all_news);
+                builder.setPositiveButton(context.getString(R.string.delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
                         if (uri != null) {
                             int rowsDeleted = context.getContentResolver().delete(uri, null, null);
                             if (rowsDeleted == 0) {
-                                Toast.makeText(context, "Error with deleting news", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, context.getString(R.string.error_with_deleting_news), Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(context, "News deleted", Toast.LENGTH_SHORT).show();
+                                mListener.onDelete(cursor);
+                                Toast.makeText(context, context.getString(R.string.news_deleted), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
                 });
 
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int id) {
                         if (dialogInterface != null) {
@@ -87,5 +91,9 @@ public class SavedNewsCursorAdapter extends CursorAdapter {
                 alertDialog.show();
             }
         });
+    }
+
+    public interface OnDeleteListener {
+        void onDelete(Cursor cursor);
     }
 }
