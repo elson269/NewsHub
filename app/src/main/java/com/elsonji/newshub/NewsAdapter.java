@@ -23,6 +23,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import static com.elsonji.newshub.PageFragment.NEWS_URL;
+
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
     private Context mContext;
@@ -56,6 +58,15 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @Override
     public void onBindViewHolder(final NewsViewHolder holder, final int position) {
         holder.newsTitleTextView.setText(mNews.get(position).getTitle());
+        holder.newsTitleTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String urlString = mNews.get(position).getUrl();
+                Intent intent = new Intent(mContext, WebViewActivity.class);
+                intent.putExtra(NEWS_URL, urlString);
+                mContext.startActivity(intent);
+            }
+        });
         holder.newsDescriptionTextView.setText(mNews.get(position).getDescription());
         Picasso.with(mContext).load(mNews.get(position).getUrlToImage()).into(holder.newsImageView);
 

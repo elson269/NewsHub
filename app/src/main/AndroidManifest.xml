@@ -25,7 +25,8 @@
 
         <activity
             android:name=".NewsListActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/MyTheme">
 
         </activity>
         <activity

@@ -71,6 +71,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
 
         mGridLayoutManager = new GridLayoutManager(getContext(), 1);
         mNewsRecyclerView.setAdapter(mNewsAdapter);
+        mNewsRecyclerView.setFocusable(true);
         mNewsRecyclerView.setLayoutManager(mGridLayoutManager);
         getActivity().getSupportLoaderManager().initLoader(mLoaderId, null, this);
 

@@ -1,51 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.elsonji.newshub.NewsListActivity">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/tab_linear_layout"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="?attr/colorPrimary">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/sliding_tabs"
-            android:layout_width="0dp"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:tabMode="scrollable" />
+            app:titleTextColor="@color/colorWhite"
+            app:layout_scrollFlags="scroll|enterAlways|snap"/>
 
-        <ImageButton
-            android:id="@+id/news_add_button"
-            android:layout_width="45dp"
-            android:layout_height="match_parent"
-            android:padding="2dp"
-            android:src="@drawable/ic_add_red_24px"
-            android:contentDescription="@string/add_news_source" />
+        <LinearLayout
+            android:id="@+id/tab_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <android.support.design.widget.TabLayout
+                android:id="@+id/sliding_tabs"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:tabTextColor="@color/colorGrey"
+                app:tabSelectedTextColor="@color/colorWhite"
+                app:tabIndicatorColor="@color/colorWhite"
+                android:layout_weight="1"
+                app:tabMode="scrollable" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/news_list_view_pager"
+            <ImageButton
+                android:id="@+id/news_add_button"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/add_news_source"
+                android:src="@drawable/ic_add_white_24px"
+                android:background="@color/colorPrimary"/>
+
+        </LinearLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tab_linear_layout"
-        android:layout_above="@id/ad_view"/>
+        tools:context="com.elsonji.newshub.NewsListActivity"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <com.google.android.gms.ads.AdView
-        xmlns:ads="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/ad_view"
-        android:layout_gravity="bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        ads:adSize="SMART_BANNER"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
-    </com.google.android.gms.ads.AdView>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/news_list_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/ad_view"
+            android:nextFocusDown="@id/ad_view" />
 
-</RelativeLayout>
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ad_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="bottom"
+            android:focusable="true"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
