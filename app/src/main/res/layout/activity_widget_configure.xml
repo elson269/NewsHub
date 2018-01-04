@@ -2,20 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.elsonji.newshub.MyNewsFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.elsonji.newshub.MyNewsFragment">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/select_news_source_msg"
         android:gravity="center_horizontal"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+        android:text="@string/select_news_source_msg"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/widget_config_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

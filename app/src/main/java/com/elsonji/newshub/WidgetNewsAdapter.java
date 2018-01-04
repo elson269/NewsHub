@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class WidgetNewsAdapter extends RecyclerView.Adapter<WidgetNewsAdapter.WidgetNewsViewHolder>{
+public class WidgetNewsAdapter extends RecyclerView.Adapter<WidgetNewsAdapter.WidgetNewsViewHolder> {
     private Context mContext;
     private ArrayList<String> mNewsSourceList;
     private int mLastCheckedPosition = -1;
@@ -26,6 +26,7 @@ public class WidgetNewsAdapter extends RecyclerView.Adapter<WidgetNewsAdapter.Wi
         mWidgetListener = listener;
         mAppWidgetId = appWidgetId;
     }
+
     @Override
     public WidgetNewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LinearLayout itemView = (LinearLayout) LayoutInflater.from(mContext).inflate(
@@ -67,6 +68,7 @@ public class WidgetNewsAdapter extends RecyclerView.Adapter<WidgetNewsAdapter.Wi
     public class WidgetNewsViewHolder extends RecyclerView.ViewHolder {
         RadioButton radioButton;
         TextView newsSourceTextView;
+
         public WidgetNewsViewHolder(View itemView) {
             super(itemView);
             radioButton = itemView.findViewById(R.id.news_widget_radio_button);

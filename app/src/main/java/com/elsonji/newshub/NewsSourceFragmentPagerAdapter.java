@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class NewsSourceFragmentPagerAdapter extends FragmentPagerAdapter {
 
+    public static final String NEWS_SOURCE = "News Source";
+    public static final String MY_NEWS = "My News";
     private ArrayList<String> mNewsSource, mMyNewsSource, mDeletedNewsData;
     private Fragment mFragment;
 
@@ -50,9 +52,9 @@ public class NewsSourceFragmentPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "News Source";
+                return NEWS_SOURCE;
             case 1:
-                return "My News";
+                return MY_NEWS;
             default:
                 return null;
         }

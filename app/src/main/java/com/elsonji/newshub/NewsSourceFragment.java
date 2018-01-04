@@ -114,7 +114,6 @@ public class NewsSourceFragment extends Fragment implements NewsSourceAdapter.On
         if (deletedMyNewsSet != null) {
             deletedMyNewsSet.clear();
         }
-
     }
 
     public void updateNews(Set<String> strings) {
@@ -147,7 +146,7 @@ public class NewsSourceFragment extends Fragment implements NewsSourceAdapter.On
         if (context instanceof DataUpdateListener) {
             mDataUpdateListener = (DataUpdateListener) context;
         } else {
-            throw new RuntimeException(context.toString() + "must implement DataUpdateListener");
+            throw new RuntimeException(context.toString() + getString(R.string.must_implement_data_update_listener));
         }
     }
 }

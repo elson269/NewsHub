@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import static com.elsonji.newshub.PageFragment.NEWS_URL;
+import static com.elsonji.newshub.data.NewsContract.NewsEntry.COLUMN_NEWS_URL;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
@@ -79,7 +80,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             favoriteNewsCursor.moveToFirst();
             try {
                 while (!favoriteNewsCursor.isAfterLast()) {
-                    savedNewsUrl = favoriteNewsCursor.getString(favoriteNewsCursor.getColumnIndexOrThrow("url"));
+                    savedNewsUrl = favoriteNewsCursor.getString(favoriteNewsCursor.getColumnIndexOrThrow(COLUMN_NEWS_URL));
                     if (!savedNewsUrl.equals(mNews.get(position).getUrl())) {
                         favoriteNewsCursor.moveToNext();
                     } else {
@@ -97,7 +98,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             @Override
             public void onClick(View view) {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
+                shareIntent.setType(mContext.getString(R.string.text_plain_type));
                 shareIntent.putExtra(Intent.EXTRA_TEXT, mNews.get(position).getUrl());
                 mContext.startActivity(shareIntent);
             }
@@ -112,7 +113,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                     values.put(NewsEntry.COLUMN_NEWS_TITLE, mNews.get(position).getTitle());
                     values.put(NewsEntry.COLUMN_NEWS_AUTHOR, mNews.get(position).getAuthor());
                     values.put(NewsEntry.COLUMN_NEWS_DESCRIPTION, mNews.get(position).getDescription());
-                    values.put(NewsEntry.COLUMN_NEWS_URL, mNews.get(position).getUrl());
+                    values.put(COLUMN_NEWS_URL, mNews.get(position).getUrl());
                     values.put(NewsEntry.COLUMN_NEWS_IMAGE_URL, mNews.get(position).getUrlToImage());
                     values.put(NewsEntry.COLUMN_NEWS_TIME, mNews.get(position).getPublishTime());
                     newUri = mContext.getContentResolver().insert(NewsEntry.CONTENT_URI, values);
@@ -136,7 +137,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                         rowId = favoriteCursor.getInt(favoriteCursor.getColumnIndexOrThrow(NewsEntry._ID));
                         try {
                             while (!favoriteCursor.isAfterLast()) {
-                                newsUrl = favoriteCursor.getString(favoriteCursor.getColumnIndexOrThrow("url"));
+                                newsUrl = favoriteCursor.getString(favoriteCursor.getColumnIndexOrThrow(COLUMN_NEWS_URL));
                                 if (!newsUrl.equals(mNews.get(position).getUrl())) {
                                     favoriteCursor.moveToNext();
                                     rowId = favoriteCursor.getInt(favoriteCursor.getColumnIndexOrThrow(NewsEntry._ID));
@@ -157,24 +158,24 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     private void showDeleteConfirmationDialog(final Uri uri, final ImageButton button) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage("Delete this news?");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.delete_this_news_warning);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int id) {
                 if (uri != null) {
                     int rowsDeleted = mContext.getContentResolver().delete(uri, null, null);
                     if (rowsDeleted == 0) {
-                        Toast.makeText(mContext, "Error with deleting news", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.error_with_deleting_news, Toast.LENGTH_SHORT).show();
                     } else {
                         button.setImageResource(mFavoriteButtonUnclicked);
                         button.setTag(mFavoriteButtonUnclicked);
-                        Toast.makeText(mContext, "News deleted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.news_deleted, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int id) {
                 if (dialogInterface != null) {

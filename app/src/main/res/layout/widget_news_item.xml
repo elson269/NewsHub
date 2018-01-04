@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    android:id="@+id/widget_linear_layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/widget_linear_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/widget_title_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="4dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            tool:text="@string/news_title" />
+    <TextView
+        android:id="@+id/widget_title_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+        tool:text="@string/news_title" />
 
-        <TextView
-            android:id="@+id/widget_description_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="10dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tool:text="@string/news_description" />
+    <TextView
+        android:id="@+id/widget_description_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        tool:text="@string/news_description" />
 
 </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.elsonji.newshub;
 //This class is created to ensure there is only one GoogleSignInClient instance across the app
 // and it can be retrieved in NewsListActivity for the Logout function because this instance cannot be
 // passed through intent.
+
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
 public class GoogleSignInClientSingleton {
@@ -14,7 +15,7 @@ public class GoogleSignInClientSingleton {
     }
 
     public static GoogleSignInClientSingleton getInstance(GoogleSignInClient googleSignInClient) {
-        if(instance == null) {
+        if (instance == null) {
             instance = new GoogleSignInClientSingleton();
             if (mGoogleSignInClient == null)
                 mGoogleSignInClient = googleSignInClient;
@@ -22,7 +23,7 @@ public class GoogleSignInClientSingleton {
         return instance;
     }
 
-    public GoogleSignInClient getGoogleSignInClient(){
+    public GoogleSignInClient getGoogleSignInClient() {
         return mGoogleSignInClient;
     }
 }

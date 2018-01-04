@@ -49,5 +49,16 @@
     <string name="cancel">Cancel</string>
     <string name="no_news_to_delete">Currently, there are no news to delete.</string>
     <string name="no_bookmarked_news">Currently, you have no bookmarked news.</string>
+    <string name="cannot_query_unknown_uri_msg">Cannot query unknown URI </string>
+    <string name="insertion_is_not_supported_for">"Insertion is not supported for " + uri</string>
+    <string name="deletion_is_not_supported_for">Deletion is not supported for</string>
+    <string name="top_news_flag">top</string>
+    <string name="authentication_failed_msg">Authentication failed.</string>
+    <string name="must_implement_news_update_listener">must implement NewsUpdateListener</string>
+    <string name="text_plain_type">text/plain</string>
+    <string name="delete_this_news_warning">Delete this news?</string>
+    <string name="android_switcher">android:switcher:</string>
+    <string name="must_implement_data_update_listener">must implement DataUpdateListener</string>
+    <string name="scheme_content">content</string>
 
 </resources>

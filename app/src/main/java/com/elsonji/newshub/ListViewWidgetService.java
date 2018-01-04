@@ -52,7 +52,7 @@ class ListRemoteViewFactory implements RemoteViewsService.RemoteViewsFactory {
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         if (isConnected) {
 
-            URL recipesUrl = createNewsUrl(mSelectedNewsString, "top");
+            URL recipesUrl = createNewsUrl(mSelectedNewsString, mContext.getString(R.string.top_news_flag));
             String jsonResponse = " ";
             try {
                 jsonResponse = NetworkUtils.getResponseFromHttpUrl(recipesUrl);

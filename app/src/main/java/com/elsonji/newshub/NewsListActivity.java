@@ -57,7 +57,7 @@ public class NewsListActivity extends AppCompatActivity {
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
 
-        String[] staticNewsSources = {"cnn", "cnbc", "reuters"};
+        String[] staticNewsSources = getResources().getStringArray(R.array.static_news_sources);
         mStaticNewsList = new ArrayList<>(Arrays.asList(staticNewsSources));
         mCurrentNewsSourceList = new ArrayList<>(Arrays.asList(staticNewsSources));
 

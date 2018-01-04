@@ -7,7 +7,7 @@ public class NewsContract {
     private NewsContract() {}
 
     public static final String CONTENT_AUTHORITY = "com.elsonji.newshub";
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_NEWS = "news";
 
     public static final class NewsEntry implements BaseColumns{

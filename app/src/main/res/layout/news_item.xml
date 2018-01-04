@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v7.widget.CardView android:id="@+id/card_view"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardCornerRadius="4dp"
     android:layout_margin="5dp"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    card_view:cardCornerRadius="4dp">
 
     <LinearLayout
         android:id="@+id/news_item_liner_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:background="?android:attr/selectableItemBackground"
         android:descendantFocusability="beforeDescendants"
         android:focusable="true"
-        android:nextFocusDown="@id/favorite_button">
+        android:nextFocusDown="@id/favorite_button"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/news_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="center"
-            android:contentDescription="@string/news_image"/>
+            android:contentDescription="@string/news_image"
+            android:scaleType="center" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,9 +46,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:background="?android:attr/selectableItemBackground"
-                android:src="@drawable/ic_bookmark_border_24dp"
                 android:contentDescription="@string/bookmark"
-                android:nextFocusDown="@id/share_button"/>
+                android:nextFocusDown="@id/share_button"
+                android:src="@drawable/ic_bookmark_border_24dp" />
 
             <ImageButton
                 android:id="@+id/share_button"
@@ -58,8 +58,8 @@
                 android:layout_marginRight="20dp"
                 android:layout_weight="1"
                 android:background="?android:attr/selectableItemBackground"
-                android:src="@drawable/ic_share_24dp"
-                android:contentDescription="@string/share" />
+                android:contentDescription="@string/share"
+                android:src="@drawable/ic_share_24dp" />
 
         </LinearLayout>
 
@@ -68,20 +68,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:focusable="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/textColor"
-            tool:text="@string/news_title"
-            android:focusable="true"
-            android:background="?android:attr/selectableItemBackground"/>
+            tool:text="@string/news_title" />
 
         <TextView
             android:id="@+id/news_description_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginTop="4dp"
             android:layout_marginBottom="10dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/textColor"
             tool:text="@string/news_description" />

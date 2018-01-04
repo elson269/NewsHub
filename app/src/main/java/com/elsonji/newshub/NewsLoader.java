@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class NewsLoader extends AsyncTaskLoader<ArrayList<News>>{
+public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
     String mUrl;
     private ArrayList<News> mNews;
 

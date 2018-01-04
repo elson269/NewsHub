@@ -9,13 +9,13 @@
         android:id="@+id/saved_news_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#00000000"/>
+        android:divider="#00000000" />
 
     <TextView
         android:id="@+id/saved_news_empty_text_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="@string/no_bookmarked_news"/>
+        android:text="@string/no_bookmarked_news" />
 
 </FrameLayout>

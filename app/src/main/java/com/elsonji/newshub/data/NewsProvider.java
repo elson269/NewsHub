@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.elsonji.newshub.R;
 import com.elsonji.newshub.data.NewsContract.NewsEntry;
 
 public class NewsProvider extends ContentProvider {
@@ -45,13 +46,13 @@ public class NewsProvider extends ContentProvider {
 
             case NEWS_ID:
                 selection = NewsEntry._ID + "?=";
-                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = database.query(NewsEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
 
             default:
-                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+                throw new IllegalArgumentException(getContext().getString(R.string.cannot_query_unknown_uri_msg) + uri);
         }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
@@ -72,7 +73,7 @@ public class NewsProvider extends ContentProvider {
                 return insertNews(uri, contentValues);
 
             default:
-                throw new IllegalArgumentException("\"Insertion is not supported for \" + uri");
+                throw new IllegalArgumentException(getContext().getString(R.string.insertion_is_not_supported_for));
         }
     }
 
@@ -104,7 +105,7 @@ public class NewsProvider extends ContentProvider {
 
             case NEWS_ID:
                 selection = NewsEntry._ID + "=?";
-                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(NewsEntry.TABLE_NAME, selection, selectionArgs);
                 if (rowsDeleted != 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
@@ -112,7 +113,7 @@ public class NewsProvider extends ContentProvider {
                 return rowsDeleted;
 
             default:
-                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+                throw new IllegalArgumentException(getContext().getString(R.string.deletion_is_not_supported_for) + uri);
         }
     }
 

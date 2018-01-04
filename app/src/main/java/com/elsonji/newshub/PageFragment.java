@@ -14,6 +14,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class PageFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<News>>,
-        NewsAdapter.OnNewsClickListener{
+        NewsAdapter.OnNewsClickListener {
 
     private static final String ARG_PAGE = "ARG_PAGE";
     public static final String NEWS_BASE_URL = "https://newsapi.org/v1/articles?";
@@ -69,7 +70,13 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         mNewsRecyclerView = rootView.findViewById(R.id.news_list_recycler_view);
         mNewsAdapter = new NewsAdapter(getContext(), new ArrayList<News>(), this);
 
-        mGridLayoutManager = new GridLayoutManager(getContext(), 1);
+        float minScreenWidth = getMinWidth();
+        if (minScreenWidth > 600) {
+            mGridLayoutManager = new GridLayoutManager(getContext(), 2);
+        } else {
+            mGridLayoutManager = new GridLayoutManager(getContext(), 1);
+        }
+
         mNewsRecyclerView.setAdapter(mNewsAdapter);
         mNewsRecyclerView.setFocusable(true);
         mNewsRecyclerView.setLayoutManager(mGridLayoutManager);
@@ -82,7 +89,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
             public void onRefresh() {
                 mNewsRecyclerView.setAdapter(mNewsAdapter);
                 mNewsRecyclerView.setLayoutManager(mGridLayoutManager);
-                getActivity().getSupportLoaderManager().initLoader(mLoaderId, null, PageFragment.this );
+                getActivity().getSupportLoaderManager().initLoader(mLoaderId, null, PageFragment.this);
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -145,6 +152,21 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         Intent intent = new Intent(getContext(), WebViewActivity.class);
         intent.putExtra(NEWS_URL, urlString);
         startActivity(intent);
+    }
+
+    private float getMinWidth() {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        int widthPixels = metrics.widthPixels;
+        int heightPixels = metrics.heightPixels;
+
+        float scaleFactor = metrics.density;
+
+        float widthDp = widthPixels / scaleFactor;
+        float heightDp = heightPixels / scaleFactor;
+
+        return Math.min(widthDp, heightDp);
     }
 }
 

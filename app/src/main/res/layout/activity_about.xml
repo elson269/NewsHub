@@ -4,34 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.elsonji.newshub.AboutActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.elsonji.newshub.AboutActivity">
 
     <TextView
         android:id="@+id/about_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="@string/about_content"
         android:gravity="start"
-        android:padding="10dp" />
+        android:padding="10dp"
+        tools:text="@string/about_content" />
 
     <ImageView
         android:id="@+id/powered_by_google"
         android:layout_width="150dp"
         android:layout_height="25dp"
-        android:src="@drawable/powered_by_google"
         android:layout_gravity="start"
-        android:paddingLeft="10dp"
         android:contentDescription="@string/powered_by_google"
+        android:paddingLeft="10dp"
         android:paddingStart="10dp"
+        android:src="@drawable/powered_by_google"
         tools:ignore="RtlSymmetry" />
 
     <TextView
         android:id="@+id/powered_by"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="@string/powered_by"
-        android:padding="10dp"/>
-
+        android:padding="10dp"
+        tools:text="@string/powered_by" />
 
 </LinearLayout>

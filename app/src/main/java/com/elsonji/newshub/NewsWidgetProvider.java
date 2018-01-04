@@ -33,7 +33,7 @@ public class NewsWidgetProvider extends AppWidgetProvider {
                 getSharedPreferences(createTag(appWidgetId), Context.MODE_PRIVATE);
         String selectedSource = selectedWidgetSourcePref.getString(createTag(appWidgetId), null);
 
-        intent.setData(Uri.fromParts("content", String.valueOf(selectedSource), null));
+        intent.setData(Uri.fromParts(context.getString(R.string.scheme_content), String.valueOf(selectedSource), null));
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_list_view);
         remoteViews.setRemoteAdapter(R.id.widget_list_view, intent);
 
@@ -46,6 +46,7 @@ public class NewsWidgetProvider extends AppWidgetProvider {
         remoteViews.setPendingIntentTemplate(R.id.widget_list_view, pendingIntent);
 
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+
     }
 
 

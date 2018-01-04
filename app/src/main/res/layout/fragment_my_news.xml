@@ -2,15 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.elsonji.newshub.MyNewsFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.elsonji.newshub.MyNewsFragment">
 
     <TextView
         android:id="@+id/my_news_fragment_emtpy_text_view"
-        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/empty_text_view_delete_fragment"/>
+        android:gravity="center"
+        android:text="@string/empty_text_view_delete_fragment" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/my_news_recycler_view"

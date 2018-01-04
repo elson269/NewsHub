@@ -19,25 +19,34 @@ import java.util.Scanner;
 public class NetworkUtils {
 
     private static final String LOG_TAG = NetworkUtils.class.getSimpleName();
+    public static final String URL_TO_IMAGE = "urlToImage";
+    public static final String URL = "url";
+    public static final String DESCRIPTION = "description";
+    public static final String TITLE = "title";
+    public static final String AUTHOR = "author";
+    public static final String ARTICLES = "articles";
+    public static final String A = "\\A";
+    public static final String PROBLEM_PARSING_THE_NEWS_JSON_RESULTS = "Problem parsing the news JSON results";
+    public static final String PUBLISHED_AT = "publishedAt";
 
     public static ArrayList<News> extractNewsFromJson(String jsonRequestResults) {
         ArrayList<News> news = new ArrayList<>();
         try {
             JSONObject rootJsonResponseObject = new JSONObject(jsonRequestResults);
-            JSONArray ArticlesArray = rootJsonResponseObject.getJSONArray("articles");
+            JSONArray ArticlesArray = rootJsonResponseObject.getJSONArray(ARTICLES);
             for (int i = 0; i < ArticlesArray.length(); i++) {
                 JSONObject ArticleObject = ArticlesArray.getJSONObject(i);
-                String author = ArticleObject.getString("author");
-                String title = ArticleObject.getString("title");
-                String description = ArticleObject.getString("description");
-                String url = ArticleObject.getString("url");
-                String urlToImage = ArticleObject.getString("urlToImage");
-                String publishTime = ArticleObject.getString("publishedAt");
+                String author = ArticleObject.getString(AUTHOR);
+                String title = ArticleObject.getString(TITLE);
+                String description = ArticleObject.getString(DESCRIPTION);
+                String url = ArticleObject.getString(URL);
+                String urlToImage = ArticleObject.getString(URL_TO_IMAGE);
+                String publishTime = ArticleObject.getString(PUBLISHED_AT);
                 news.add(new News(author, title, description, url, urlToImage, publishTime));
             }
             return news;
         }catch (JSONException e) {
-            Log.e(LOG_TAG, "Problem parsing the news JSON results", e);
+            Log.e(LOG_TAG, PROBLEM_PARSING_THE_NEWS_JSON_RESULTS, e);
         }
         return null;
     }
@@ -58,7 +67,7 @@ public class NetworkUtils {
             InputStream in = urlConnection.getInputStream();
 
             Scanner scanner = new Scanner(in);
-            scanner.useDelimiter("\\A");
+            scanner.useDelimiter(A);
 
             boolean hasInput = scanner.hasNext();
             if (hasInput) {

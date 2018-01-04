@@ -37,7 +37,6 @@ public class MyNewsFragment extends Fragment implements OnNewsSourceClickListene
     private Set<String> mRemainingMyNewsSet;
     private Set<String> mSourceDeletedFromMyNewsSet;
 
-
     public static MyNewsFragment newInstance(ArrayList<String> data, ArrayList<String> deletedNewsData) {
         Bundle args = new Bundle();
         args.putStringArrayList(NEWS_SOURCE_FOR_DELETION, data);
@@ -104,7 +103,6 @@ public class MyNewsFragment extends Fragment implements OnNewsSourceClickListene
             mEmptyTextView.setVisibility(View.VISIBLE);
         }
 
-
         //Convert ArrayList to Set so it can be added to SharedPreferences.
         mSourceDeletedFromMyNewsSet = new HashSet<>();
         mSourceDeletedFromMyNewsSet.addAll(mSourceDeletedFromMyNews);
@@ -164,8 +162,7 @@ public class MyNewsFragment extends Fragment implements OnNewsSourceClickListene
         if (context instanceof NewsUpdateListener) {
             mNewsUpdateListener = (NewsUpdateListener) context;
         } else {
-            throw new RuntimeException(context.toString() + "must implement NewsUpdateListener");
+            throw new RuntimeException(context.toString() + getString(R.string.must_implement_news_update_listener));
         }
     }
-
 }

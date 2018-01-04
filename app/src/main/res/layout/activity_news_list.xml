@@ -16,8 +16,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:titleTextColor="@color/colorWhite"
-            app:layout_scrollFlags="scroll|enterAlways|snap"/>
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:titleTextColor="@color/colorWhite" />
 
         <LinearLayout
             android:id="@+id/tab_linear_layout"
@@ -29,30 +29,29 @@
                 android:id="@+id/sliding_tabs"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:tabTextColor="@color/colorGrey"
-                app:tabSelectedTextColor="@color/colorWhite"
-                app:tabIndicatorColor="@color/colorWhite"
                 android:layout_weight="1"
-                app:tabMode="scrollable" />
+                app:tabIndicatorColor="@color/colorWhite"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@color/colorWhite"
+                app:tabTextColor="@color/colorGrey" />
 
             <ImageButton
                 android:id="@+id/news_add_button"
                 android:layout_width="45dp"
                 android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
                 android:contentDescription="@string/add_news_source"
-                android:src="@drawable/ic_add_white_24px"
-                android:background="@color/colorPrimary"/>
+                android:src="@drawable/ic_add_white_24px" />
 
         </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.elsonji.newshub.NewsListActivity"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.elsonji.newshub.NewsListActivity">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/news_list_view_pager"
@@ -61,8 +60,7 @@
             android:layout_above="@id/ad_view"
             android:nextFocusDown="@id/ad_view" />
 
-        <com.google.android.gms.ads.AdView
-            xmlns:ads="http://schemas.android.com/apk/res-auto"
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/ad_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

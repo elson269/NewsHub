@@ -10,6 +10,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "news.db";
     private static final int DATABASE_VERSION = 1;
+    private static final String DROP_TABLE_IF_EXISTS = "DROP TABLE IF EXISTS ";
 
     public NewsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -31,7 +32,7 @@ public class NewsDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + NewsEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL(DROP_TABLE_IF_EXISTS + NewsEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }

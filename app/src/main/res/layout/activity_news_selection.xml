@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.elsonji.newshub.NewsSelectionActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.elsonji.newshub.NewsSelectionActivity">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/news_selection_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/news_selection_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>
