@@ -18,6 +18,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.net.MalformedURLException;
@@ -42,6 +43,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     private GridLayoutManager mGridLayoutManager;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private static Resources mResources;
+    private ProgressBar mProgressBar;
 
     public static PageFragment newInstance(String newsTabContent, int id) {
         Bundle args = new Bundle();
@@ -69,6 +71,9 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         View rootView = inflater.inflate(R.layout.fragment_news_list, container, false);
         mNewsRecyclerView = rootView.findViewById(R.id.news_list_recycler_view);
         mNewsAdapter = new NewsAdapter(getContext(), new ArrayList<News>(), this);
+
+        mNewsRecyclerView.setVisibility(View.INVISIBLE);
+        mProgressBar = rootView.findViewById(R.id.progress_bar);
 
         float minScreenWidth = getMinWidth();
         if (minScreenWidth > 600) {
@@ -114,6 +119,8 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(Loader<ArrayList<News>> loader, ArrayList<News> news) {
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mNewsRecyclerView.setVisibility(View.VISIBLE);
         mNews = news;
         mNewsAdapter.clearNews();
         if (news != null && !news.isEmpty()) {
