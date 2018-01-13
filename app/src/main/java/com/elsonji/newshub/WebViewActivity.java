@@ -1,5 +1,6 @@
 package com.elsonji.newshub;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import static com.elsonji.newshub.PageFragment.NEWS_URL;
 
 public class WebViewActivity extends AppCompatActivity {
 
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +25,7 @@ public class WebViewActivity extends AppCompatActivity {
         Intent fillInIntent = getIntent();
         Bundle extras = fillInIntent.getExtras();
         if (extras != null) {
+            webView.getSettings().setJavaScriptEnabled(true);
             webView.loadUrl(extras.getString(EXTRA_NEWS_URL));
         }
         webView.loadUrl(newsUrl);
