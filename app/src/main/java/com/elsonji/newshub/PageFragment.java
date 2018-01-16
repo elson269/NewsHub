@@ -15,6 +15,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,8 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private static Resources mResources;
     private ProgressBar mProgressBar;
+    private int mLastFirstVisiblePosition;
+    private int mTopView;
 
     public static PageFragment newInstance(String newsTabContent, int id) {
         Bundle args = new Bundle();
@@ -174,6 +177,25 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         float heightDp = heightPixels / scaleFactor;
 
         return Math.min(widthDp, heightDp);
+    }
+
+    @Override
+    public void onPause() {
+
+        mLastFirstVisiblePosition = mGridLayoutManager.findFirstVisibleItemPosition();
+        super.onPause();
+        View startView = mNewsRecyclerView.getChildAt(0);
+        mTopView = (startView == null) ? 0 : (startView.getTop() - mNewsRecyclerView.getPaddingTop());
+
+       Log.i("aaaaaaabbbb", String.valueOf(mLastFirstVisiblePosition));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mNewsRecyclerView.scrollToPosition(3);
+        Log.i("aaaaaaabbbbc", String.valueOf(mLastFirstVisiblePosition));
+
     }
 }
 
