@@ -193,8 +193,14 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onResume() {
         super.onResume();
-        mNewsRecyclerView.scrollToPosition(3);
-        Log.i("aaaaaaabbbbc", String.valueOf(mLastFirstVisiblePosition));
+        mNewsRecyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mNewsRecyclerView.scrollToPosition(3);
+            }
+        }, 200);
+       // mNewsRecyclerView.getLayoutManager().smoothScrollToPosition(mNewsRecyclerView, null, 3);
+       // Log.i("aaaaaaabbbbc", String.valueOf(mLastFirstVisiblePosition));
 
     }
 }
