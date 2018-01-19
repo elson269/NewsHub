@@ -2,6 +2,7 @@ package com.elsonji.newshub;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -15,7 +16,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +36,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     public static final String API_KEY_PARAM = "apiKey";
     public static final String LOADER_ID = "LOADER_ID";
     public static final String NEWS_URL = "NEWS_URL";
+    public static final String VISIBLE_POSITION_KEY = "VISIBLE_POSITION_KEY";
     private String mNewsTabContent;
     private int mLoaderId;
     private ArrayList<News> mNews;
@@ -45,7 +46,6 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private static Resources mResources;
     private ProgressBar mProgressBar;
-    private int mLastFirstVisiblePosition;
     private int mTopView;
 
     public static PageFragment newInstance(String newsTabContent, int id) {
@@ -181,27 +181,33 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onPause() {
-
-        mLastFirstVisiblePosition = mGridLayoutManager.findFirstVisibleItemPosition();
         super.onPause();
-        View startView = mNewsRecyclerView.getChildAt(0);
-        mTopView = (startView == null) ? 0 : (startView.getTop() - mNewsRecyclerView.getPaddingTop());
-
-       Log.i("aaaaaaabbbb", String.valueOf(mLastFirstVisiblePosition));
+        int lastFirstVisiblePosition = mGridLayoutManager.findFirstVisibleItemPosition();
+        //VISIBLE_POSITION_KEY + mLoaderId is used to distinguish each SharedPreferences in each page view.
+        //onPause is called multiple times based on setOffscreenPageLimit(), so the last page view's SharedPreferences
+        //will override the first page view's SharedPreferences. To make each page view's SharedPreferences' key unique,
+        //mLoaderId (unique) is added to VISIBLE_POSITION_KEY to distinguish it.
+        SharedPreferences visiblePositionPref = getContext().getSharedPreferences(VISIBLE_POSITION_KEY + mLoaderId,
+                Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = visiblePositionPref.edit();
+        editor.putInt(VISIBLE_POSITION_KEY, lastFirstVisiblePosition);
+        editor.apply();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        SharedPreferences visiblePositionPref = getContext().getSharedPreferences(VISIBLE_POSITION_KEY + mLoaderId,
+                Context.MODE_PRIVATE);
+        final int lastFirstVisiblePosition = visiblePositionPref.getInt(VISIBLE_POSITION_KEY, -1);
+        //postDelayed is used to force recycler view to go to the desired position; if not used,
+        //it will go the the top of the recycler view.
         mNewsRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mNewsRecyclerView.scrollToPosition(3);
+                mNewsRecyclerView.scrollToPosition(lastFirstVisiblePosition);
             }
-        }, 200);
-       // mNewsRecyclerView.getLayoutManager().smoothScrollToPosition(mNewsRecyclerView, null, 3);
-       // Log.i("aaaaaaabbbbc", String.valueOf(mLastFirstVisiblePosition));
-
+        }, 50);
     }
 }
 
