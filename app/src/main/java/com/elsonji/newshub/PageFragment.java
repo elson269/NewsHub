@@ -207,7 +207,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
             public void run() {
                 mNewsRecyclerView.scrollToPosition(lastFirstVisiblePosition);
             }
-        }, 50);
+        }, 200);
     }
 }
 
