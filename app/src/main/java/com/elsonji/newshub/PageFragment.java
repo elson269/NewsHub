@@ -205,7 +205,7 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
         mNewsRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mNewsRecyclerView.scrollToPosition(lastFirstVisiblePosition);
+                mGridLayoutManager.scrollToPosition(lastFirstVisiblePosition);
             }
         }, 200);
     }
