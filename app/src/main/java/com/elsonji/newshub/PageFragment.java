@@ -201,11 +201,11 @@ public class PageFragment extends Fragment implements LoaderManager.LoaderCallba
                 Context.MODE_PRIVATE);
         final int lastFirstVisiblePosition = visiblePositionPref.getInt(VISIBLE_POSITION_KEY, -1);
         //postDelayed is used to force recycler view to go to the desired position; if not used,
-        //it will go the the top of the recycler view.
+        //it will go to the the top of the recycler view.
         mNewsRecyclerView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mGridLayoutManager.scrollToPosition(lastFirstVisiblePosition);
+                mNewsRecyclerView.smoothScrollToPosition(lastFirstVisiblePosition);
             }
         }, 200);
     }

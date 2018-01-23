@@ -198,7 +198,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     }
 
     public class NewsViewHolder extends RecyclerView.ViewHolder {
-        TextView newsTitleTextView, newsDescriptionTextView;
+        TextView newsTitleTextView, newsDescriptionTextView, timeTextView;
         ImageView newsImageView;
         ImageButton favoriteImageButton, shareImageButton;
 
@@ -209,6 +209,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             newsImageView = itemView.findViewById(R.id.news_image_view);
             favoriteImageButton = itemView.findViewById(R.id.favorite_button);
             shareImageButton = itemView.findViewById(R.id.share_button);
+            timeTextView = itemView.findViewById(R.id.time_text_view);
         }
     }
 
